@@ -1,13 +1,19 @@
 {
   "ablations": "event feature-group and forecast baseline comparisons are measured on the held-out test split",
-  "artifact_version": "aarogya-day2-bundle-v1",
-  "calibration": "split-conformal absolute residual widths from calibration patients only",
+  "artifact_version": "aarogya-day3-bundle-v1",
+  "calibration": {
+    "interval_calibration_patients": 6,
+    "probability_method": "patient-disjoint Platt sigmoid on calibration-tuning patients",
+    "probability_tuning_patients": 6,
+    "roles_are_patient_disjoint": true
+  },
   "cli_output": "/home/xking/projects/health/artifacts",
   "cohort": {
     "days": 5,
     "patients": 60,
     "step_minutes": 5
   },
+  "conformal": "finite-sample absolute-residual rank from calibration-interval patients only",
   "data": "seeded synthetic demographics, labs, and five-minute observations",
   "data_mode": "synthetic",
   "feature_names": {
@@ -158,7 +164,7 @@
     "alpha_by_horizon": {
       "120": 0.25,
       "30": 0.0,
-      "60": 0.25
+      "60": 0.0
     },
     "candidate_alphas": [
       0.0,
@@ -169,10 +175,12 @@
     ],
     "clinical_interpretation": "adaptive residual, not a clinically identified insulin-sensitivity model",
     "enabled": true,
-    "fit_split": "calibration patients only",
+    "fit_split": "training patients only for global model",
     "history_size": 4,
+    "interval_split": "calibration-interval patients only for conformal widths",
     "method": "bounded online per-patient residual correction",
-    "test_policy": "residuals are eligible only after their target timestamp is observed"
+    "test_policy": "residuals are eligible only after their target timestamp is observed",
+    "tuning_split": "calibration-tuning patients only for residual shrinkage"
   },
   "platform": "Linux-6.18.40.1-microsoft-standard-WSL2-x86_64-with-glibc2.43",
   "preprocessing": "median imputation, missing indicators, and standardization fit on train rows only",

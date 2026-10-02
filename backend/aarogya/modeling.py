@@ -140,6 +140,73 @@ class ProbabilityEstimator:
             return np.full(array.shape[0], fallback, dtype=float)
 
 
+class ProbabilityCalibrator:
+    """Train-only Platt calibrator for probabilities from a fitted classifier.
+
+    With no usable rows or a one-class calibration split, the object reports an
+    explicit fallback status and leaves probabilities unchanged or constant. It
+    never fits on test rows.
+    """
+
+    def __init__(self) -> None:
+        self.model: LogisticRegression | None = None
+        self.constant_: float | None = None
+        self.available_: bool = False
+        self.status_: str = "not_fitted"
+        self.n_calibration_: int = 0
+
+    @staticmethod
+    def _logit(values: np.ndarray) -> np.ndarray:
+        clipped = np.clip(np.asarray(values, dtype=float), 1e-6, 1.0 - 1e-6)
+        return np.log(clipped / (1.0 - clipped)).reshape(-1, 1)
+
+    def fit(self, probabilities: Any, target: Any) -> "ProbabilityCalibrator":
+        values = np.asarray(probabilities, dtype=float).reshape(-1)
+        labels = np.asarray(target, dtype=int).reshape(-1)
+        if values.size != labels.size:
+            raise ValueError("probability and target row counts differ")
+        finite = np.isfinite(values) & np.isfinite(labels)
+        values = np.clip(values[finite], 0.0, 1.0)
+        labels = labels[finite]
+        self.model = None
+        self.constant_ = None
+        self.available_ = False
+        self.n_calibration_ = int(labels.size)
+        self.status_ = "unavailable_no_rows"
+        if labels.size == 0:
+            return self
+        if np.unique(labels).size < 2:
+            self.constant_ = float(np.mean(labels))
+            self.available_ = True
+            self.status_ = "constant_single_class_fallback"
+            return self
+        try:
+            model = LogisticRegression(max_iter=300, solver="lbfgs", random_state=2026)
+            model.fit(self._logit(values), labels)
+            self.model = model
+            self.available_ = True
+            self.status_ = "platt_sigmoid"
+        except (ValueError, ArithmeticError, RuntimeError):
+            self.status_ = "unavailable_fit_error"
+        return self
+
+    def predict_probability(self, probabilities: Any) -> np.ndarray:
+        values = np.asarray(probabilities, dtype=float).reshape(-1)
+        safe_values = np.clip(np.nan_to_num(values, nan=0.0, posinf=1.0, neginf=0.0), 0.0, 1.0)
+        if not self.available_:
+            return safe_values
+        if self.model is None:
+            return np.full(safe_values.size, float(self.constant_ or 0.0), dtype=float)
+        try:
+            result = self.model.predict_proba(self._logit(safe_values))
+            classes = np.asarray(self.model.classes_)
+            positive = np.flatnonzero(classes == 1)
+            index = int(positive[0]) if positive.size else result.shape[1] - 1
+            return np.clip(np.nan_to_num(result[:, index], nan=0.0, posinf=1.0, neginf=0.0), 0.0, 1.0)
+        except (ValueError, RuntimeError, AttributeError):
+            return safe_values
+
+
 class RegressionEstimator:
     """CPU-friendly histogram gradient boosting with a constant fallback."""
 
@@ -243,6 +310,7 @@ def safe_quantile(values: Iterable[float], quantile: float) -> float | None:
 __all__ = [
     "NumericPreprocessor",
     "ProbabilityEstimator",
+    "ProbabilityCalibrator",
     "RegressionEstimator",
     "finite_or_none",
     "json_safe",

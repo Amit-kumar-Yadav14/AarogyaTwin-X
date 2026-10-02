@@ -11,9 +11,10 @@ type MetricsPanelProps = {
 };
 
 type FlatMetric = { label: string; value: unknown };
+const MAX_METRIC_ROWS = 500;
 
 function flatten(value: unknown, prefix: string, output: FlatMetric[], depth = 0): void {
-  if (output.length >= 80) return;
+  if (output.length >= MAX_METRIC_ROWS) return;
   if (value === null || value === undefined) {
     output.push({ label: prefix, value: null });
     return;
@@ -55,10 +56,14 @@ export function MetricsPanel({ metrics, loading, error, onRetry }: MetricsPanelP
     flatten(metrics.forecast_before_personalization ?? null, 'Forecast · temporal without residual', rows);
     flatten(metrics.forecast_baseline ?? null, 'Forecast · Day-1 summary baseline', rows);
     flatten(metrics.forecast_naive_baselines ?? null, 'Forecast · naive baselines', rows);
+    flatten(metrics.missingness ?? null, 'Missingness tests', rows);
+    flatten(metrics.distribution_shift ?? null, 'Distribution-shift tests', rows);
+    flatten(metrics.event_alerts ?? null, 'Event-level alert metrics', rows);
   }
   const cohort = asRecord(metrics?.cohort);
   const cohortRows = cohort ? Object.entries(cohort).slice(0, 6) : [];
   const limitations = Array.isArray(metrics?.limitations) ? metrics.limitations : [];
+  const rowsTruncated = rows.length >= MAX_METRIC_ROWS;
 
   return (
     <Panel id="evaluation" className="metrics-panel">
@@ -95,6 +100,7 @@ export function MetricsPanel({ metrics, loading, error, onRetry }: MetricsPanelP
           ) : (
             <EmptyState title="No model result rows returned" description="Use the raw JSON below to inspect the flexible metrics payload." />
           )}
+          {rowsTruncated && <div className="metrics-disclaimer"><Info size={15} aria-hidden="true" /><span>The table reached its display limit; use the complete metrics JSON below for all returned values.</span></div>}
           {limitations.length > 0 && (
             <div className="limitations-box"><strong>Declared limitations</strong><ul>{limitations.map((item, index) => <li key={`${String(item)}-${index}`}>{typeof item === 'string' ? item : metricValue(item)}</li>)}</ul></div>
           )}

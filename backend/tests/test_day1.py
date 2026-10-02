@@ -7,6 +7,7 @@ from fastapi.testclient import TestClient
 
 from aarogya.api import create_app
 from aarogya.engine import TwinEngine
+from aarogya.modeling import ProbabilityCalibrator
 from aarogya.pipeline import build_artifacts
 from aarogya.simulation import event_label, feature_vectors, generate_cohort
 
@@ -37,9 +38,21 @@ def test_temporal_features_are_past_only() -> None:
     assert np.array_equal(before["temporal"], after["temporal"], equal_nan=True)
 
 
+def test_probability_calibrator_handles_single_class_and_empty_inputs() -> None:
+    empty = ProbabilityCalibrator().fit([], [])
+    assert empty.status_ == "unavailable_no_rows"
+    assert empty.predict_probability([0.2, 0.8]).tolist() == [0.2, 0.8]
+
+    single = ProbabilityCalibrator().fit([0.2, 0.8], [0, 0])
+    assert single.status_ == "constant_single_class_fallback"
+    assert single.predict_probability([0.2, 0.8]).tolist() == [0.0, 0.0]
+
+
 def test_pipeline_persists_reloadable_held_out_engine(tmp_path: Path) -> None:
     artifact_dir = tmp_path / "artifacts"
-    metrics = build_artifacts(artifact_dir, patients=6, days=2, seed=2026)
+    # Ten patients yield two calibration patients, allowing separate tuning and
+    # interval-calibration roles in the Day-3 artifact.
+    metrics = build_artifacts(artifact_dir, patients=10, days=2, seed=2026)
 
     assert (artifact_dir / "bundle.joblib").is_file()
     assert (artifact_dir / "metrics.json").is_file()
@@ -49,7 +62,37 @@ def test_pipeline_persists_reloadable_held_out_engine(tmp_path: Path) -> None:
     assert metrics["forecast_before_personalization"]["30"]["model_type"] == "HistGradientBoostingRegressor_temporal_lags"
     assert metrics["forecast_baseline"]["30"]["model_type"] == "HistGradientBoostingRegressor_day1_summary"
     assert metrics["personalized"] is True
-    assert metrics["personalization"]["fit_split"] == "calibration patients only"
+    assert metrics["personalization"]["tuning_split"] == "calibration-tuning patients only for residual shrinkage"
+    assert metrics["personalization"]["interval_split"] == "calibration-interval patients only for conformal widths"
+    assert metrics["calibration"]["roles_are_patient_disjoint"] is True
+    assert metrics["calibration"]["probability_tuning_patients"] >= 1
+    assert metrics["calibration"]["interval_calibration_patients"] >= 1
+    assert "log_loss" in metrics["models"]["fusion"]
+    assert "expected_calibration_error" in metrics["models"]["fusion"]
+    assert "models_before_probability_calibration" in metrics
+    missingness = metrics["missingness"]["scenarios"]
+    assert set(missingness) == {
+        "natural_missingness",
+        "random_recent_stream_missingness_25pct",
+        "recent_cgm_dropout_30m",
+    }
+    assert missingness["natural_missingness"]["30"]["n_predicted"] > 0
+    assert missingness["recent_cgm_dropout_30m"]["30"]["n_predicted"] == 0
+    assert missingness["recent_cgm_dropout_30m"]["30"]["abstention_rate"] == 1.0
+    shifts = metrics["distribution_shift"]["scenarios"]
+    assert set(shifts) == {
+        "nominal_test",
+        "glucose_level_plus_25",
+        "meal_carbs_2x_inputs",
+        "hba1c_plus_1_static",
+    }
+    assert shifts["nominal_test"]["30"]["n_test"] > 0
+    assert shifts["glucose_level_plus_25"]["30"]["target_transform"] == "+25 mg/dL"
+    alerts = metrics["event_alerts"]
+    assert alerts["status"] == "measured"
+    assert set(alerts["thresholds"]) == {"0.10", "0.20", "0.50"}
+    assert alerts["thresholds"]["0.20"]["episode_metrics"]["n_event_episodes"] >= 0
+    assert "false_alerts_per_patient_day" in alerts["thresholds"]["0.20"]["episode_metrics"]
     naive = metrics["forecast_naive_baselines"]
     assert set(naive) == {"last_observed_glucose", "patient_mean_glucose"}
     assert all(set(results) == {"30", "60", "120"} for results in naive.values())

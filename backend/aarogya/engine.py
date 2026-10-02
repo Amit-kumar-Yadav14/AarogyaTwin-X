@@ -22,8 +22,8 @@ from .simulation import (
 )
 
 
-MODEL_VERSION = "day2-temporal-residual-v1"
-INTERVAL_METHOD = "split-conformal absolute residuals (90%; calibration patients only)"
+MODEL_VERSION = "day3-calibrated-temporal-residual-v1"
+INTERVAL_METHOD = "split-conformal absolute residual rank (90%; calibration-interval patients only)"
 RISK_SEMANTICS = (
     "Estimated probability of the contract-defined new sustained >180 mg/dL event within 120 minutes; "
     "not a diagnosis or treatment recommendation."
@@ -228,7 +228,13 @@ class TwinEngine:
         if isinstance(classification, Mapping):
             try:
                 transformed = classification["preprocessor"].transform(fusion)
-                values = classification["estimator"].predict_probability(transformed)
+                raw_values = classification["estimator"].predict_probability(transformed)
+                calibrator = classification.get("calibrator")
+                values = (
+                    calibrator.predict_probability(raw_values)
+                    if calibrator is not None and hasattr(calibrator, "predict_probability")
+                    else raw_values
+                )
                 if len(values) and math.isfinite(float(values[0])):
                     risk = float(np.clip(values[0], 0.0, 1.0))
             except (KeyError, TypeError, ValueError, RuntimeError, AttributeError):
@@ -443,7 +449,7 @@ class TwinEngine:
             "data": str(self._provenance.get("data", "seeded synthetic observations")),
             "model_version": MODEL_VERSION,
             "simulation_version": str(self._provenance.get("simulation_version", "synthetic-day1-v1")),
-            "calibration_split": "patient-disjoint calibration patients; split-conformal widths",
+            "calibration_split": "patient-disjoint calibration-tuning patients for probability calibration; separate calibration-interval patients for split-conformal widths",
             "risk_semantics": RISK_SEMANTICS,
             "explanation": "Day-2 CPU temporal lag model with bounded causal-in-time residual personalization; this is an adaptive residual, not a clinically identified insulin-sensitivity model. Drivers remain observed context only.",
         }

@@ -2,81 +2,420 @@
   "ablations": {
     "event_classification": {
       "fusion": {
-        "auprc": 0.2765234711821107,
+        "auprc": 0.2765234711821106,
         "auroc": 0.9432969025083233,
-        "brier": 0.05034969312142747,
+        "brier": 0.02436843583744457,
+        "calibration_method": "platt_sigmoid",
+        "expected_calibration_error": 0.02387391049227047,
+        "log_loss": 0.13558738259623737,
         "model_type": "logistic_regression",
-        "n_calibration": 1375,
+        "n_calibration": 650,
         "n_test": 1510,
         "n_train": 4355,
-        "prevalence": 0.025827814569536423
+        "prevalence": 0.025827814569536423,
+        "reliability_bins": [
+          {
+            "absolute_gap": 0.020120001066406868,
+            "count": 1488,
+            "lower": 0.0,
+            "mean_predicted": 0.0013853752776791543,
+            "observed_rate": 0.021505376344086023,
+            "upper": 0.1
+          },
+          {
+            "absolute_gap": 0.1490441243517837,
+            "count": 10,
+            "lower": 0.1,
+            "mean_predicted": 0.15095587564821628,
+            "observed_rate": 0.3,
+            "upper": 0.2
+          },
+          {
+            "absolute_gap": 0.26003486858324687,
+            "count": 3,
+            "lower": 0.2,
+            "mean_predicted": 0.26003486858324687,
+            "observed_rate": 0.0,
+            "upper": 0.30000000000000004
+          },
+          {
+            "absolute_gap": 0.2435253561436031,
+            "count": 5,
+            "lower": 0.30000000000000004,
+            "mean_predicted": 0.3564746438563969,
+            "observed_rate": 0.6,
+            "upper": 0.4
+          },
+          {
+            "absolute_gap": 0.5671312629767162,
+            "count": 1,
+            "lower": 0.4,
+            "mean_predicted": 0.4328687370232837,
+            "observed_rate": 1.0,
+            "upper": 0.5
+          },
+          {
+            "absolute_gap": null,
+            "count": 0,
+            "lower": 0.5,
+            "mean_predicted": null,
+            "observed_rate": null,
+            "upper": 0.6000000000000001
+          },
+          {
+            "absolute_gap": 0.6442303761130121,
+            "count": 2,
+            "lower": 0.6000000000000001,
+            "mean_predicted": 0.6442303761130121,
+            "observed_rate": 0.0,
+            "upper": 0.7000000000000001
+          },
+          {
+            "absolute_gap": 0.7672786113266494,
+            "count": 1,
+            "lower": 0.7000000000000001,
+            "mean_predicted": 0.7672786113266494,
+            "observed_rate": 0.0,
+            "upper": 0.8
+          },
+          {
+            "absolute_gap": null,
+            "count": 0,
+            "lower": 0.8,
+            "mean_predicted": null,
+            "observed_rate": null,
+            "upper": 0.9
+          },
+          {
+            "absolute_gap": null,
+            "count": 0,
+            "lower": 0.9,
+            "mean_predicted": null,
+            "observed_rate": null,
+            "upper": 1.0
+          }
+        ]
       },
       "persistence": {
         "auprc": 0.025827814569536423,
         "auroc": 0.5,
         "brier": 0.02536656803817136,
+        "expected_calibration_error": 0.014346758312360762,
+        "log_loss": 0.12662354331610562,
         "method": "constant train-patient event prevalence persistence comparator",
         "model_type": "constant_train_prevalence",
         "n_calibration": 0,
         "n_test": 1510,
         "n_train": 4355,
-        "prevalence": 0.025827814569536423
+        "prevalence": 0.025827814569536423,
+        "reliability_bins": [
+          {
+            "absolute_gap": 0.014346758312360762,
+            "count": 1510,
+            "lower": 0.0,
+            "mean_predicted": 0.011481056257175661,
+            "observed_rate": 0.025827814569536423,
+            "upper": 0.1
+          },
+          {
+            "absolute_gap": null,
+            "count": 0,
+            "lower": 0.1,
+            "mean_predicted": null,
+            "observed_rate": null,
+            "upper": 0.2
+          },
+          {
+            "absolute_gap": null,
+            "count": 0,
+            "lower": 0.2,
+            "mean_predicted": null,
+            "observed_rate": null,
+            "upper": 0.30000000000000004
+          },
+          {
+            "absolute_gap": null,
+            "count": 0,
+            "lower": 0.30000000000000004,
+            "mean_predicted": null,
+            "observed_rate": null,
+            "upper": 0.4
+          },
+          {
+            "absolute_gap": null,
+            "count": 0,
+            "lower": 0.4,
+            "mean_predicted": null,
+            "observed_rate": null,
+            "upper": 0.5
+          },
+          {
+            "absolute_gap": null,
+            "count": 0,
+            "lower": 0.5,
+            "mean_predicted": null,
+            "observed_rate": null,
+            "upper": 0.6000000000000001
+          },
+          {
+            "absolute_gap": null,
+            "count": 0,
+            "lower": 0.6000000000000001,
+            "mean_predicted": null,
+            "observed_rate": null,
+            "upper": 0.7000000000000001
+          },
+          {
+            "absolute_gap": null,
+            "count": 0,
+            "lower": 0.7000000000000001,
+            "mean_predicted": null,
+            "observed_rate": null,
+            "upper": 0.8
+          },
+          {
+            "absolute_gap": null,
+            "count": 0,
+            "lower": 0.8,
+            "mean_predicted": null,
+            "observed_rate": null,
+            "upper": 0.9
+          },
+          {
+            "absolute_gap": null,
+            "count": 0,
+            "lower": 0.9,
+            "mean_predicted": null,
+            "observed_rate": null,
+            "upper": 1.0
+          }
+        ]
       },
       "sensor_only": {
-        "auprc": 0.3075571777794596,
+        "auprc": 0.3075571777794597,
         "auroc": 0.949920688873782,
-        "brier": 0.08475995754987997,
+        "brier": 0.022160240993559573,
+        "calibration_method": "platt_sigmoid",
+        "expected_calibration_error": 0.01605064384877779,
+        "log_loss": 0.08446353158358995,
         "model_type": "logistic_regression",
-        "n_calibration": 1375,
+        "n_calibration": 650,
         "n_test": 1510,
         "n_train": 4355,
-        "prevalence": 0.025827814569536423
+        "prevalence": 0.025827814569536423,
+        "reliability_bins": [
+          {
+            "absolute_gap": 0.01143508103179084,
+            "count": 1442,
+            "lower": 0.0,
+            "mean_predicted": 0.003128025764325665,
+            "observed_rate": 0.014563106796116505,
+            "upper": 0.1
+          },
+          {
+            "absolute_gap": 0.09048427306921594,
+            "count": 30,
+            "lower": 0.1,
+            "mean_predicted": 0.1428490602641174,
+            "observed_rate": 0.23333333333333334,
+            "upper": 0.2
+          },
+          {
+            "absolute_gap": 0.10919363513471259,
+            "count": 15,
+            "lower": 0.2,
+            "mean_predicted": 0.24252696846804592,
+            "observed_rate": 0.13333333333333333,
+            "upper": 0.30000000000000004
+          },
+          {
+            "absolute_gap": 0.04967678446261309,
+            "count": 10,
+            "lower": 0.30000000000000004,
+            "mean_predicted": 0.3496767844626131,
+            "observed_rate": 0.3,
+            "upper": 0.4
+          },
+          {
+            "absolute_gap": 0.08851985656822436,
+            "count": 2,
+            "lower": 0.4,
+            "mean_predicted": 0.41148014343177564,
+            "observed_rate": 0.5,
+            "upper": 0.5
+          },
+          {
+            "absolute_gap": 0.05150595025525595,
+            "count": 4,
+            "lower": 0.5,
+            "mean_predicted": 0.551505950255256,
+            "observed_rate": 0.5,
+            "upper": 0.6000000000000001
+          },
+          {
+            "absolute_gap": 0.02268230889775602,
+            "count": 3,
+            "lower": 0.6000000000000001,
+            "mean_predicted": 0.6439843577689106,
+            "observed_rate": 0.6666666666666666,
+            "upper": 0.7000000000000001
+          },
+          {
+            "absolute_gap": 0.7574549643526565,
+            "count": 2,
+            "lower": 0.7000000000000001,
+            "mean_predicted": 0.7574549643526565,
+            "observed_rate": 0.0,
+            "upper": 0.8
+          },
+          {
+            "absolute_gap": 0.8633959121030098,
+            "count": 1,
+            "lower": 0.8,
+            "mean_predicted": 0.8633959121030098,
+            "observed_rate": 0.0,
+            "upper": 0.9
+          },
+          {
+            "absolute_gap": 0.06846851842971158,
+            "count": 1,
+            "lower": 0.9,
+            "mean_predicted": 0.9315314815702884,
+            "observed_rate": 1.0,
+            "upper": 1.0
+          }
+        ]
       },
       "static_only": {
         "auprc": 0.10902378708759443,
         "auroc": 0.8198155798427722,
-        "brier": 0.09238786104608207,
+        "brier": 0.02425405071872285,
+        "calibration_method": "platt_sigmoid",
+        "expected_calibration_error": 0.0173966877349578,
+        "log_loss": 0.1245283489673734,
         "model_type": "logistic_regression",
-        "n_calibration": 1375,
+        "n_calibration": 650,
         "n_test": 1510,
         "n_train": 4355,
-        "prevalence": 0.025827814569536423
+        "prevalence": 0.025827814569536423,
+        "reliability_bins": [
+          {
+            "absolute_gap": 0.0173966877349578,
+            "count": 1510,
+            "lower": 0.0,
+            "mean_predicted": 0.008431126834578622,
+            "observed_rate": 0.025827814569536423,
+            "upper": 0.1
+          },
+          {
+            "absolute_gap": null,
+            "count": 0,
+            "lower": 0.1,
+            "mean_predicted": null,
+            "observed_rate": null,
+            "upper": 0.2
+          },
+          {
+            "absolute_gap": null,
+            "count": 0,
+            "lower": 0.2,
+            "mean_predicted": null,
+            "observed_rate": null,
+            "upper": 0.30000000000000004
+          },
+          {
+            "absolute_gap": null,
+            "count": 0,
+            "lower": 0.30000000000000004,
+            "mean_predicted": null,
+            "observed_rate": null,
+            "upper": 0.4
+          },
+          {
+            "absolute_gap": null,
+            "count": 0,
+            "lower": 0.4,
+            "mean_predicted": null,
+            "observed_rate": null,
+            "upper": 0.5
+          },
+          {
+            "absolute_gap": null,
+            "count": 0,
+            "lower": 0.5,
+            "mean_predicted": null,
+            "observed_rate": null,
+            "upper": 0.6000000000000001
+          },
+          {
+            "absolute_gap": null,
+            "count": 0,
+            "lower": 0.6000000000000001,
+            "mean_predicted": null,
+            "observed_rate": null,
+            "upper": 0.7000000000000001
+          },
+          {
+            "absolute_gap": null,
+            "count": 0,
+            "lower": 0.7000000000000001,
+            "mean_predicted": null,
+            "observed_rate": null,
+            "upper": 0.8
+          },
+          {
+            "absolute_gap": null,
+            "count": 0,
+            "lower": 0.8,
+            "mean_predicted": null,
+            "observed_rate": null,
+            "upper": 0.9
+          },
+          {
+            "absolute_gap": null,
+            "count": 0,
+            "lower": 0.9,
+            "mean_predicted": null,
+            "observed_rate": null,
+            "upper": 1.0
+          }
+        ]
       }
     },
     "forecast": {
       "day1_summary": {
         "120": {
-          "empirical_coverage": 0.8964013086150491,
+          "empirical_coverage": 0.9011268629589241,
           "horizon_minutes": 120,
           "interval_coverage_target": 0.9,
           "mae": 8.664649054088622,
-          "mean_interval_width": 35.191202985521954,
+          "mean_interval_width": 36.199101363171934,
           "model_type": "HistGradientBoostingRegressor_day1_summary",
-          "n_calibration": 2742,
+          "n_calibration": 1380,
           "n_test": 2751,
           "n_train": 8220,
           "rmse": 11.302352540725645
         },
         "30": {
-          "empirical_coverage": 0.8947368421052632,
+          "empirical_coverage": 0.8954627949183304,
           "horizon_minutes": 30,
           "interval_coverage_target": 0.9,
           "mae": 7.20717269523249,
-          "mean_interval_width": 29.43353854866922,
+          "mean_interval_width": 29.528692513322653,
           "model_type": "HistGradientBoostingRegressor_day1_summary",
-          "n_calibration": 2740,
+          "n_calibration": 1378,
           "n_test": 2755,
           "n_train": 8217,
           "rmse": 9.715810415324814
         },
         "60": {
-          "empirical_coverage": 0.8986928104575164,
+          "empirical_coverage": 0.9070442992011619,
           "horizon_minutes": 60,
           "interval_coverage_target": 0.9,
           "mae": 7.907359769111929,
-          "mean_interval_width": 32.16469565751436,
+          "mean_interval_width": 33.24387747384719,
           "model_type": "HistGradientBoostingRegressor_day1_summary",
-          "n_calibration": 2741,
+          "n_calibration": 1380,
           "n_test": 2754,
           "n_train": 8219,
           "rmse": 10.451596174076451
@@ -149,68 +488,71 @@
       "temporal_lags_causal_residual": {
         "120": {
           "alpha": 0.25,
-          "empirical_coverage": 0.8953107960741549,
+          "empirical_coverage": 0.9000363504180298,
           "history_size": 4,
           "horizon_minutes": 120,
           "interval_coverage_target": 0.9,
           "mae": 8.380893309177633,
-          "mean_interval_width": 34.144243720748165,
+          "mean_interval_width": 34.934829564583026,
           "model_type": "temporal_lags_with_causal_residual",
-          "n_calibration": 2742,
+          "n_calibration": 1380,
           "n_test": 2751,
           "n_train": 8220,
+          "n_tuning": 1362,
           "rmse": 11.001138719003468
         },
         "30": {
           "alpha": 0.0,
-          "empirical_coverage": 0.8983666061705989,
+          "empirical_coverage": 0.8994555353901996,
           "history_size": 4,
           "horizon_minutes": 30,
           "interval_coverage_target": 0.9,
           "mae": 7.209908534743265,
-          "mean_interval_width": 29.82323062149709,
+          "mean_interval_width": 30.04064319684784,
           "model_type": "temporal_lags_with_causal_residual",
-          "n_calibration": 2740,
+          "n_calibration": 1378,
           "n_test": 2755,
           "n_train": 8217,
+          "n_tuning": 1362,
           "rmse": 9.760710022622806
         },
         "60": {
-          "alpha": 0.25,
-          "empirical_coverage": 0.8990559186637618,
+          "alpha": 0.0,
+          "empirical_coverage": 0.8936092955700798,
           "history_size": 4,
           "horizon_minutes": 60,
           "interval_coverage_target": 0.9,
-          "mae": 7.858670555076107,
-          "mean_interval_width": 32.32344996591982,
+          "mae": 7.854340906415378,
+          "mean_interval_width": 32.07652811888744,
           "model_type": "temporal_lags_with_causal_residual",
-          "n_calibration": 2741,
+          "n_calibration": 1380,
           "n_test": 2754,
           "n_train": 8219,
-          "rmse": 10.441340149966528
+          "n_tuning": 1361,
+          "rmse": 10.41507227415458
         }
       },
       "temporal_lags_no_personalization": {
         "120": {
-          "empirical_coverage": 0.8993093420574336,
+          "empirical_coverage": 0.906215921483097,
           "horizon_minutes": 120,
           "interval_coverage_target": 0.9,
           "mae": 8.602376478798774,
-          "mean_interval_width": 35.377013097149955,
+          "mean_interval_width": 36.42400222849972,
           "model_type": "HistGradientBoostingRegressor_temporal_lags",
-          "n_calibration": 2742,
+          "n_calibration": 1380,
           "n_test": 2751,
           "n_train": 8220,
           "rmse": 11.25315007288381
         },
         "30": {
-          "empirical_coverage": 0.8983666061705989,
+          "empirical_coverage": 0.8994555353901996,
           "horizon_minutes": 30,
           "interval_coverage_target": 0.9,
           "mae": 7.209908534743265,
-          "mean_interval_width": 29.82323062149709,
+          "mean_interval_width": 30.04064319684784,
           "model_type": "HistGradientBoostingRegressor_temporal_lags",
-          "n_calibration": 2740,
+          "n_calibration": 1378,
           "n_test": 2755,
           "n_train": 8217,
           "rmse": 9.760710022622806
@@ -220,9 +562,9 @@
           "horizon_minutes": 60,
           "interval_coverage_target": 0.9,
           "mae": 7.854340906415378,
-          "mean_interval_width": 32.05600415852928,
+          "mean_interval_width": 32.07652811888744,
           "model_type": "HistGradientBoostingRegressor_temporal_lags",
-          "n_calibration": 2741,
+          "n_calibration": 1380,
           "n_test": 2754,
           "n_train": 8219,
           "rmse": 10.41507227415458
@@ -230,7 +572,17 @@
       }
     }
   },
+  "calibration": {
+    "interval_calibration_patients": 6,
+    "probability_method": "patient-disjoint Platt sigmoid on calibration-tuning patients",
+    "probability_tuning_patients": 6,
+    "roles_are_patient_disjoint": true
+  },
   "cohort": {
+    "calibration_role_counts": {
+      "interval": 6,
+      "tuning": 6
+    },
     "days": 5,
     "patients": 60,
     "replay_step_unit": "elapsed_minutes",
@@ -249,14 +601,255 @@
   },
   "conformal": {
     "absolute_residual_widths": {
-      "120": 17.072121860374082,
-      "30": 14.911615310748545,
-      "60": 16.16172498295991
+      "120": 17.467414782291513,
+      "30": 15.02032159842392,
+      "60": 16.03826405944372
     },
-    "calibration_population": "calibration patients only",
-    "coverage_target": 0.9
+    "calibration_population": "calibration-interval patients only",
+    "coverage_target": 0.9,
+    "minimum_rows": 20
   },
   "data_mode": "synthetic",
+  "distribution_shift": {
+    "evaluation_model": "frozen temporal lag model without retraining or residual personalization",
+    "scenarios": {
+      "glucose_level_plus_25": {
+        "120": {
+          "empirical_coverage": 0.6208651399491094,
+          "interval_coverage_target": 0.9,
+          "mae": 15.394241377515758,
+          "mean_interval_width": 34.934829564583026,
+          "n_test": 2751,
+          "rmse": 18.404085617497444,
+          "scenario": "glucose_level_plus_25",
+          "shift_description": "Glucose level shifted +25 mg/dL in past inputs and future targets; no retraining.",
+          "target_transform": "+25 mg/dL"
+        },
+        "30": {
+          "empirical_coverage": 0.8087114337568058,
+          "interval_coverage_target": 0.9,
+          "mae": 9.704409697749647,
+          "mean_interval_width": 30.04064319684784,
+          "n_test": 2755,
+          "rmse": 12.763054848092219,
+          "scenario": "glucose_level_plus_25",
+          "shift_description": "Glucose level shifted +25 mg/dL in past inputs and future targets; no retraining.",
+          "target_transform": "+25 mg/dL"
+        },
+        "60": {
+          "empirical_coverage": 0.7389251997095134,
+          "interval_coverage_target": 0.9,
+          "mae": 11.62703128819824,
+          "mean_interval_width": 32.07652811888744,
+          "n_test": 2754,
+          "rmse": 14.605288779939293,
+          "scenario": "glucose_level_plus_25",
+          "shift_description": "Glucose level shifted +25 mg/dL in past inputs and future targets; no retraining.",
+          "target_transform": "+25 mg/dL"
+        }
+      },
+      "hba1c_plus_1_static": {
+        "120": {
+          "empirical_coverage": 0.8026172300981461,
+          "interval_coverage_target": 0.9,
+          "mae": 10.721379241824987,
+          "mean_interval_width": 34.934829564583026,
+          "n_test": 2751,
+          "rmse": 13.776210984744065,
+          "scenario": "hba1c_plus_1_static",
+          "shift_description": "Static HbA1c input shifted +1.0 percentage point; original future glucose target retained.",
+          "target_transform": "unchanged"
+        },
+        "30": {
+          "empirical_coverage": 0.8722323049001814,
+          "interval_coverage_target": 0.9,
+          "mae": 7.78277803209946,
+          "mean_interval_width": 30.04064319684784,
+          "n_test": 2755,
+          "rmse": 10.411016563340553,
+          "scenario": "hba1c_plus_1_static",
+          "shift_description": "Static HbA1c input shifted +1.0 percentage point; original future glucose target retained.",
+          "target_transform": "unchanged"
+        },
+        "60": {
+          "empirical_coverage": 0.8489469862018881,
+          "interval_coverage_target": 0.9,
+          "mae": 8.909524123018683,
+          "mean_interval_width": 32.07652811888744,
+          "n_test": 2754,
+          "rmse": 11.717135365030973,
+          "scenario": "hba1c_plus_1_static",
+          "shift_description": "Static HbA1c input shifted +1.0 percentage point; original future glucose target retained.",
+          "target_transform": "unchanged"
+        }
+      },
+      "meal_carbs_2x_inputs": {
+        "120": {
+          "empirical_coverage": 0.8934932751726645,
+          "interval_coverage_target": 0.9,
+          "mae": 8.69354188477679,
+          "mean_interval_width": 34.934829564583026,
+          "n_test": 2751,
+          "rmse": 11.361973684387328,
+          "scenario": "meal_carbs_2x_inputs",
+          "shift_description": "Observed meal carbohydrate inputs doubled; original future glucose target retained.",
+          "target_transform": "unchanged"
+        },
+        "30": {
+          "empirical_coverage": 0.899092558983666,
+          "interval_coverage_target": 0.9,
+          "mae": 7.2312964503004915,
+          "mean_interval_width": 30.04064319684784,
+          "n_test": 2755,
+          "rmse": 9.818886373023775,
+          "scenario": "meal_carbs_2x_inputs",
+          "shift_description": "Observed meal carbohydrate inputs doubled; original future glucose target retained.",
+          "target_transform": "unchanged"
+        },
+        "60": {
+          "empirical_coverage": 0.8932461873638344,
+          "interval_coverage_target": 0.9,
+          "mae": 7.87917450792492,
+          "mean_interval_width": 32.07652811888744,
+          "n_test": 2754,
+          "rmse": 10.468885757489987,
+          "scenario": "meal_carbs_2x_inputs",
+          "shift_description": "Observed meal carbohydrate inputs doubled; original future glucose target retained.",
+          "target_transform": "unchanged"
+        }
+      },
+      "nominal_test": {
+        "120": {
+          "empirical_coverage": 0.8945837877135587,
+          "interval_coverage_target": 0.9,
+          "mae": 8.602376478798774,
+          "mean_interval_width": 34.934829564583026,
+          "n_test": 2751,
+          "rmse": 11.25315007288381,
+          "scenario": "nominal_test",
+          "shift_description": "Unshifted held-out synthetic test patients.",
+          "target_transform": "unchanged"
+        },
+        "30": {
+          "empirical_coverage": 0.8994555353901996,
+          "interval_coverage_target": 0.9,
+          "mae": 7.209908534743265,
+          "mean_interval_width": 30.04064319684784,
+          "n_test": 2755,
+          "rmse": 9.760710022622806,
+          "scenario": "nominal_test",
+          "shift_description": "Unshifted held-out synthetic test patients.",
+          "target_transform": "unchanged"
+        },
+        "60": {
+          "empirical_coverage": 0.8936092955700798,
+          "interval_coverage_target": 0.9,
+          "mae": 7.854340906415378,
+          "mean_interval_width": 32.07652811888744,
+          "n_test": 2754,
+          "rmse": 10.41507227415458,
+          "scenario": "nominal_test",
+          "shift_description": "Unshifted held-out synthetic test patients.",
+          "target_transform": "unchanged"
+        }
+      }
+    },
+    "test_policy": "all shifts are applied only to held-out synthetic test inputs; no shift selects model settings"
+  },
+  "event_alerts": {
+    "event_definition": {
+      "anchor_requirement": "anchor glucose is observed and <= 180 mg/dL",
+      "comparison": ">",
+      "confirmation_span_minutes": 15,
+      "consecutive_readings": 4,
+      "description": "four consecutive readings strictly >180 mg/dL within the future 120-minute window",
+      "forecast_window_minutes": 120,
+      "missing_future_policy": "exclude from labels, never treat as a negative",
+      "reading_interval_minutes": 5,
+      "threshold_mg_dl": 180.0
+    },
+    "labels_with_missing_future": "excluded before alert metrics; never negative",
+    "prediction_model": "calibrated fusion classifier",
+    "status": "measured",
+    "test_patient_days": 60,
+    "thresholds": {
+      "0.10": {
+        "episode_metrics": {
+          "detected_event_episodes": 5,
+          "episode_sensitivity": 0.22727272727272727,
+          "false_alerts_per_patient_day": 0.25,
+          "median_lead_minutes": 70.0,
+          "n_event_episodes": 22,
+          "n_test_patients": 12
+        },
+        "threshold": 0.1,
+        "window_metrics": {
+          "alert_rate": 0.01456953642384106,
+          "f1": 0.2295081967213115,
+          "false_alert_rate": 0.010197144799456152,
+          "false_negative": 32,
+          "false_positive": 15,
+          "n_windows": 1510,
+          "precision": 0.3181818181818182,
+          "prevalence": 0.025827814569536423,
+          "sensitivity": 0.1794871794871795,
+          "specificity": 0.9898028552005439,
+          "true_negative": 1456,
+          "true_positive": 7
+        }
+      },
+      "0.20": {
+        "episode_metrics": {
+          "detected_event_episodes": 4,
+          "episode_sensitivity": 0.18181818181818182,
+          "false_alerts_per_patient_day": 0.13333333333333333,
+          "median_lead_minutes": 70.0,
+          "n_event_episodes": 22,
+          "n_test_patients": 12
+        },
+        "threshold": 0.2,
+        "window_metrics": {
+          "alert_rate": 0.007947019867549669,
+          "f1": 0.15686274509803919,
+          "false_alert_rate": 0.005438477226376614,
+          "false_negative": 35,
+          "false_positive": 8,
+          "n_windows": 1510,
+          "precision": 0.3333333333333333,
+          "prevalence": 0.025827814569536423,
+          "sensitivity": 0.10256410256410256,
+          "specificity": 0.9945615227736234,
+          "true_negative": 1463,
+          "true_positive": 4
+        }
+      },
+      "0.50": {
+        "episode_metrics": {
+          "detected_event_episodes": 0,
+          "episode_sensitivity": 0.0,
+          "false_alerts_per_patient_day": 0.05,
+          "median_lead_minutes": null,
+          "n_event_episodes": 22,
+          "n_test_patients": 12
+        },
+        "threshold": 0.5,
+        "window_metrics": {
+          "alert_rate": 0.001986754966887417,
+          "f1": null,
+          "false_alert_rate": 0.0020394289598912306,
+          "false_negative": 39,
+          "false_positive": 3,
+          "n_windows": 1510,
+          "precision": 0.0,
+          "prevalence": 0.025827814569536423,
+          "sensitivity": 0.0,
+          "specificity": 0.9979605710401088,
+          "true_negative": 1468,
+          "true_positive": 0
+        }
+      }
+    }
+  },
   "event_definition": {
     "anchor_requirement": "anchor glucose is observed and <= 180 mg/dL",
     "comparison": ">",
@@ -271,80 +864,83 @@
   "forecast": {
     "120": {
       "alpha": 0.25,
-      "empirical_coverage": 0.8953107960741549,
+      "empirical_coverage": 0.9000363504180298,
       "history_size": 4,
       "horizon_minutes": 120,
       "interval_coverage_target": 0.9,
       "mae": 8.380893309177633,
-      "mean_interval_width": 34.144243720748165,
+      "mean_interval_width": 34.934829564583026,
       "model_type": "temporal_lags_with_causal_residual",
-      "n_calibration": 2742,
+      "n_calibration": 1380,
       "n_test": 2751,
       "n_train": 8220,
+      "n_tuning": 1362,
       "rmse": 11.001138719003468
     },
     "30": {
       "alpha": 0.0,
-      "empirical_coverage": 0.8983666061705989,
+      "empirical_coverage": 0.8994555353901996,
       "history_size": 4,
       "horizon_minutes": 30,
       "interval_coverage_target": 0.9,
       "mae": 7.209908534743265,
-      "mean_interval_width": 29.82323062149709,
+      "mean_interval_width": 30.04064319684784,
       "model_type": "temporal_lags_with_causal_residual",
-      "n_calibration": 2740,
+      "n_calibration": 1378,
       "n_test": 2755,
       "n_train": 8217,
+      "n_tuning": 1362,
       "rmse": 9.760710022622806
     },
     "60": {
-      "alpha": 0.25,
-      "empirical_coverage": 0.8990559186637618,
+      "alpha": 0.0,
+      "empirical_coverage": 0.8936092955700798,
       "history_size": 4,
       "horizon_minutes": 60,
       "interval_coverage_target": 0.9,
-      "mae": 7.858670555076107,
-      "mean_interval_width": 32.32344996591982,
+      "mae": 7.854340906415378,
+      "mean_interval_width": 32.07652811888744,
       "model_type": "temporal_lags_with_causal_residual",
-      "n_calibration": 2741,
+      "n_calibration": 1380,
       "n_test": 2754,
       "n_train": 8219,
-      "rmse": 10.441340149966528
+      "n_tuning": 1361,
+      "rmse": 10.41507227415458
     }
   },
   "forecast_baseline": {
     "120": {
-      "empirical_coverage": 0.8964013086150491,
+      "empirical_coverage": 0.9011268629589241,
       "horizon_minutes": 120,
       "interval_coverage_target": 0.9,
       "mae": 8.664649054088622,
-      "mean_interval_width": 35.191202985521954,
+      "mean_interval_width": 36.199101363171934,
       "model_type": "HistGradientBoostingRegressor_day1_summary",
-      "n_calibration": 2742,
+      "n_calibration": 1380,
       "n_test": 2751,
       "n_train": 8220,
       "rmse": 11.302352540725645
     },
     "30": {
-      "empirical_coverage": 0.8947368421052632,
+      "empirical_coverage": 0.8954627949183304,
       "horizon_minutes": 30,
       "interval_coverage_target": 0.9,
       "mae": 7.20717269523249,
-      "mean_interval_width": 29.43353854866922,
+      "mean_interval_width": 29.528692513322653,
       "model_type": "HistGradientBoostingRegressor_day1_summary",
-      "n_calibration": 2740,
+      "n_calibration": 1378,
       "n_test": 2755,
       "n_train": 8217,
       "rmse": 9.715810415324814
     },
     "60": {
-      "empirical_coverage": 0.8986928104575164,
+      "empirical_coverage": 0.9070442992011619,
       "horizon_minutes": 60,
       "interval_coverage_target": 0.9,
       "mae": 7.907359769111929,
-      "mean_interval_width": 32.16469565751436,
+      "mean_interval_width": 33.24387747384719,
       "model_type": "HistGradientBoostingRegressor_day1_summary",
-      "n_calibration": 2741,
+      "n_calibration": 1380,
       "n_test": 2754,
       "n_train": 8219,
       "rmse": 10.451596174076451
@@ -352,25 +948,25 @@
   },
   "forecast_before_personalization": {
     "120": {
-      "empirical_coverage": 0.8993093420574336,
+      "empirical_coverage": 0.906215921483097,
       "horizon_minutes": 120,
       "interval_coverage_target": 0.9,
       "mae": 8.602376478798774,
-      "mean_interval_width": 35.377013097149955,
+      "mean_interval_width": 36.42400222849972,
       "model_type": "HistGradientBoostingRegressor_temporal_lags",
-      "n_calibration": 2742,
+      "n_calibration": 1380,
       "n_test": 2751,
       "n_train": 8220,
       "rmse": 11.25315007288381
     },
     "30": {
-      "empirical_coverage": 0.8983666061705989,
+      "empirical_coverage": 0.8994555353901996,
       "horizon_minutes": 30,
       "interval_coverage_target": 0.9,
       "mae": 7.209908534743265,
-      "mean_interval_width": 29.82323062149709,
+      "mean_interval_width": 30.04064319684784,
       "model_type": "HistGradientBoostingRegressor_temporal_lags",
-      "n_calibration": 2740,
+      "n_calibration": 1378,
       "n_test": 2755,
       "n_train": 8217,
       "rmse": 9.760710022622806
@@ -380,9 +976,9 @@
       "horizon_minutes": 60,
       "interval_coverage_target": 0.9,
       "mae": 7.854340906415378,
-      "mean_interval_width": 32.05600415852928,
+      "mean_interval_width": 32.07652811888744,
       "model_type": "HistGradientBoostingRegressor_temporal_lags",
-      "n_calibration": 2741,
+      "n_calibration": 1380,
       "n_test": 2754,
       "n_train": 8219,
       "rmse": 10.41507227415458
@@ -490,55 +1086,948 @@
   "limitations": [
     "All records and labels are seeded synthetic development data, not clinical evidence.",
     "Windows are sampled every 30 minutes but remain correlated within patients; row counts are not independent subjects.",
-    "Train, calibration, and test partitions are patient-disjoint; split-conformal widths use calibration patients only.",
+    "Train, calibration-tuning, calibration-interval, and test partitions are patient-disjoint; no test rows tune models or calibration.",
     "Future label/target readings with missing CGM are excluded rather than treated as negative or normal.",
     "The event endpoint is a project-specific strict-above-180 mg/dL sustained episode definition, not a universal clinical definition.",
     "No causal treatment effect, medication recommendation, diagnosis, or clinical validation is provided.",
     "The residual correction is an adaptive online residual, not a clinically identified insulin-sensitivity model.",
-    "Residual shrinkage is selected on calibration patients; test residuals are used only after their target timestamps are observed.",
+    "Residual shrinkage is selected on calibration-tuning patients; conformal widths use separate calibration-interval patients; test residuals are used only after their target timestamps are observed.",
     "Naive forecast baselines use only the last observed glucose or the running patient glucose mean through each anchor; they do not use future values."
   ],
+  "missingness": {
+    "evaluation_model": "temporal lag model without residual personalization",
+    "event_label_exclusions": {
+      "calibration": {
+        "note": "None includes anchors already above threshold and rows with missing future readings.",
+        "policy": "unknown or contract-ineligible rows are excluded, never negative",
+        "unknown_event_label_rows": 1457
+      },
+      "test": {
+        "note": "None includes anchors already above threshold and rows with missing future readings.",
+        "policy": "unknown or contract-ineligible rows are excluded, never negative",
+        "unknown_event_label_rows": 1322
+      },
+      "train": {
+        "note": "None includes anchors already above threshold and rows with missing future readings.",
+        "policy": "unknown or contract-ineligible rows are excluded, never negative",
+        "unknown_event_label_rows": 4141
+      }
+    },
+    "prediction_policy": "abstain when latest CGM is absent or older than 15 minutes",
+    "scenarios": {
+      "natural_missingness": {
+        "120": {
+          "abstention_rate": 0.0036350418029806875,
+          "empirical_coverage": 0.8945640277271069,
+          "interval_coverage_target": 0.9,
+          "mae": 8.599618380509035,
+          "mean_cgm_age_minutes": 0.21454545454545454,
+          "mean_interval_width": 34.934829564583026,
+          "mean_missing_fraction_60m": 0.030279032732685954,
+          "n_abstained": 10,
+          "n_eligible": 2741,
+          "n_predicted": 2741,
+          "n_targets": 2751,
+          "n_test": 2741,
+          "rmse": 11.254945914627022,
+          "scenario": "natural_missingness"
+        },
+        "30": {
+          "abstention_rate": 0.0032667876588021727,
+          "empirical_coverage": 0.9002184996358339,
+          "interval_coverage_target": 0.9,
+          "mae": 7.1864266316883,
+          "mean_cgm_age_minutes": 0.20515613652868556,
+          "mean_interval_width": 30.04064319684784,
+          "mean_missing_fraction_60m": 0.03014432633307407,
+          "n_abstained": 9,
+          "n_eligible": 2746,
+          "n_predicted": 2746,
+          "n_targets": 2755,
+          "n_test": 2746,
+          "rmse": 9.70361406826021,
+          "scenario": "natural_missingness"
+        },
+        "60": {
+          "abstention_rate": 0.0036310820624546603,
+          "empirical_coverage": 0.8935860058309038,
+          "interval_coverage_target": 0.9,
+          "mae": 7.846142779785411,
+          "mean_cgm_age_minutes": 0.21794406102433708,
+          "mean_interval_width": 32.07652811888744,
+          "mean_missing_fraction_60m": 0.030397344122834322,
+          "n_abstained": 10,
+          "n_eligible": 2744,
+          "n_predicted": 2744,
+          "n_targets": 2754,
+          "n_test": 2744,
+          "rmse": 10.397255164625363,
+          "scenario": "natural_missingness"
+        }
+      },
+      "random_recent_stream_missingness_25pct": {
+        "120": {
+          "abstention_rate": 0.0036350418029806875,
+          "empirical_coverage": 0.8934695366654506,
+          "interval_coverage_target": 0.9,
+          "mae": 8.628748804553663,
+          "mean_cgm_age_minutes": 0.2290909090909091,
+          "mean_interval_width": 34.934829564583026,
+          "mean_missing_fraction_60m": 0.2722819407661283,
+          "n_abstained": 10,
+          "n_eligible": 2741,
+          "n_predicted": 2741,
+          "n_targets": 2751,
+          "n_test": 2741,
+          "rmse": 11.253062670558494,
+          "scenario": "random_recent_stream_missingness_25pct"
+        },
+        "30": {
+          "abstention_rate": 0.0032667876588021727,
+          "empirical_coverage": 0.892571012381646,
+          "interval_coverage_target": 0.9,
+          "mae": 7.365412747990761,
+          "mean_cgm_age_minutes": 0.219680464778504,
+          "mean_interval_width": 30.04064319684784,
+          "mean_missing_fraction_60m": 0.2720508166969147,
+          "n_abstained": 9,
+          "n_eligible": 2746,
+          "n_predicted": 2746,
+          "n_targets": 2755,
+          "n_test": 2746,
+          "rmse": 10.045331598980713,
+          "scenario": "random_recent_stream_missingness_25pct"
+        },
+        "60": {
+          "abstention_rate": 0.0036310820624546603,
+          "empirical_coverage": 0.8903061224489796,
+          "interval_coverage_target": 0.9,
+          "mae": 8.019667541293716,
+          "mean_cgm_age_minutes": 0.23247366509262624,
+          "mean_interval_width": 32.07652811888744,
+          "mean_missing_fraction_60m": 0.2722706366497216,
+          "n_abstained": 10,
+          "n_eligible": 2744,
+          "n_predicted": 2744,
+          "n_targets": 2754,
+          "n_test": 2744,
+          "rmse": 10.584947268516826,
+          "scenario": "random_recent_stream_missingness_25pct"
+        }
+      },
+      "recent_cgm_dropout_30m": {
+        "120": {
+          "abstention_rate": 1.0,
+          "empirical_coverage": null,
+          "interval_coverage_target": 0.9,
+          "mae": null,
+          "mean_cgm_age_minutes": 30.217232566630155,
+          "mean_interval_width": null,
+          "mean_missing_fraction_60m": 0.51832234165931,
+          "n_abstained": 2751,
+          "n_eligible": 0,
+          "n_predicted": 0,
+          "n_targets": 2751,
+          "n_test": 0,
+          "rmse": null,
+          "scenario": "recent_cgm_dropout_30m"
+        },
+        "30": {
+          "abstention_rate": 1.0,
+          "empirical_coverage": null,
+          "interval_coverage_target": 0.9,
+          "mae": null,
+          "mean_cgm_age_minutes": 30.218818380743983,
+          "mean_interval_width": null,
+          "mean_missing_fraction_60m": 0.5187278541180538,
+          "n_abstained": 2755,
+          "n_eligible": 0,
+          "n_predicted": 0,
+          "n_targets": 2755,
+          "n_test": 0,
+          "rmse": null,
+          "scenario": "recent_cgm_dropout_30m"
+        },
+        "60": {
+          "abstention_rate": 1.0,
+          "empirical_coverage": null,
+          "interval_coverage_target": 0.9,
+          "mae": null,
+          "mean_cgm_age_minutes": 30.218898212331265,
+          "mean_interval_width": null,
+          "mean_missing_fraction_60m": 0.5185833592696337,
+          "n_abstained": 2754,
+          "n_eligible": 0,
+          "n_predicted": 0,
+          "n_targets": 2754,
+          "n_test": 0,
+          "rmse": null,
+          "scenario": "recent_cgm_dropout_30m"
+        }
+      }
+    }
+  },
   "models": {
     "fusion": {
-      "auprc": 0.2765234711821107,
+      "auprc": 0.2765234711821106,
       "auroc": 0.9432969025083233,
-      "brier": 0.05034969312142747,
+      "brier": 0.02436843583744457,
+      "calibration_method": "platt_sigmoid",
+      "expected_calibration_error": 0.02387391049227047,
+      "log_loss": 0.13558738259623737,
       "model_type": "logistic_regression",
-      "n_calibration": 1375,
+      "n_calibration": 650,
       "n_test": 1510,
       "n_train": 4355,
-      "prevalence": 0.025827814569536423
+      "prevalence": 0.025827814569536423,
+      "reliability_bins": [
+        {
+          "absolute_gap": 0.020120001066406868,
+          "count": 1488,
+          "lower": 0.0,
+          "mean_predicted": 0.0013853752776791543,
+          "observed_rate": 0.021505376344086023,
+          "upper": 0.1
+        },
+        {
+          "absolute_gap": 0.1490441243517837,
+          "count": 10,
+          "lower": 0.1,
+          "mean_predicted": 0.15095587564821628,
+          "observed_rate": 0.3,
+          "upper": 0.2
+        },
+        {
+          "absolute_gap": 0.26003486858324687,
+          "count": 3,
+          "lower": 0.2,
+          "mean_predicted": 0.26003486858324687,
+          "observed_rate": 0.0,
+          "upper": 0.30000000000000004
+        },
+        {
+          "absolute_gap": 0.2435253561436031,
+          "count": 5,
+          "lower": 0.30000000000000004,
+          "mean_predicted": 0.3564746438563969,
+          "observed_rate": 0.6,
+          "upper": 0.4
+        },
+        {
+          "absolute_gap": 0.5671312629767162,
+          "count": 1,
+          "lower": 0.4,
+          "mean_predicted": 0.4328687370232837,
+          "observed_rate": 1.0,
+          "upper": 0.5
+        },
+        {
+          "absolute_gap": null,
+          "count": 0,
+          "lower": 0.5,
+          "mean_predicted": null,
+          "observed_rate": null,
+          "upper": 0.6000000000000001
+        },
+        {
+          "absolute_gap": 0.6442303761130121,
+          "count": 2,
+          "lower": 0.6000000000000001,
+          "mean_predicted": 0.6442303761130121,
+          "observed_rate": 0.0,
+          "upper": 0.7000000000000001
+        },
+        {
+          "absolute_gap": 0.7672786113266494,
+          "count": 1,
+          "lower": 0.7000000000000001,
+          "mean_predicted": 0.7672786113266494,
+          "observed_rate": 0.0,
+          "upper": 0.8
+        },
+        {
+          "absolute_gap": null,
+          "count": 0,
+          "lower": 0.8,
+          "mean_predicted": null,
+          "observed_rate": null,
+          "upper": 0.9
+        },
+        {
+          "absolute_gap": null,
+          "count": 0,
+          "lower": 0.9,
+          "mean_predicted": null,
+          "observed_rate": null,
+          "upper": 1.0
+        }
+      ]
     },
     "persistence": {
       "auprc": 0.025827814569536423,
       "auroc": 0.5,
       "brier": 0.02536656803817136,
+      "expected_calibration_error": 0.014346758312360762,
+      "log_loss": 0.12662354331610562,
       "method": "constant train-patient event prevalence persistence comparator",
       "model_type": "constant_train_prevalence",
       "n_calibration": 0,
       "n_test": 1510,
       "n_train": 4355,
-      "prevalence": 0.025827814569536423
+      "prevalence": 0.025827814569536423,
+      "reliability_bins": [
+        {
+          "absolute_gap": 0.014346758312360762,
+          "count": 1510,
+          "lower": 0.0,
+          "mean_predicted": 0.011481056257175661,
+          "observed_rate": 0.025827814569536423,
+          "upper": 0.1
+        },
+        {
+          "absolute_gap": null,
+          "count": 0,
+          "lower": 0.1,
+          "mean_predicted": null,
+          "observed_rate": null,
+          "upper": 0.2
+        },
+        {
+          "absolute_gap": null,
+          "count": 0,
+          "lower": 0.2,
+          "mean_predicted": null,
+          "observed_rate": null,
+          "upper": 0.30000000000000004
+        },
+        {
+          "absolute_gap": null,
+          "count": 0,
+          "lower": 0.30000000000000004,
+          "mean_predicted": null,
+          "observed_rate": null,
+          "upper": 0.4
+        },
+        {
+          "absolute_gap": null,
+          "count": 0,
+          "lower": 0.4,
+          "mean_predicted": null,
+          "observed_rate": null,
+          "upper": 0.5
+        },
+        {
+          "absolute_gap": null,
+          "count": 0,
+          "lower": 0.5,
+          "mean_predicted": null,
+          "observed_rate": null,
+          "upper": 0.6000000000000001
+        },
+        {
+          "absolute_gap": null,
+          "count": 0,
+          "lower": 0.6000000000000001,
+          "mean_predicted": null,
+          "observed_rate": null,
+          "upper": 0.7000000000000001
+        },
+        {
+          "absolute_gap": null,
+          "count": 0,
+          "lower": 0.7000000000000001,
+          "mean_predicted": null,
+          "observed_rate": null,
+          "upper": 0.8
+        },
+        {
+          "absolute_gap": null,
+          "count": 0,
+          "lower": 0.8,
+          "mean_predicted": null,
+          "observed_rate": null,
+          "upper": 0.9
+        },
+        {
+          "absolute_gap": null,
+          "count": 0,
+          "lower": 0.9,
+          "mean_predicted": null,
+          "observed_rate": null,
+          "upper": 1.0
+        }
+      ]
     },
     "sensor_only": {
-      "auprc": 0.3075571777794596,
+      "auprc": 0.3075571777794597,
       "auroc": 0.949920688873782,
-      "brier": 0.08475995754987997,
+      "brier": 0.022160240993559573,
+      "calibration_method": "platt_sigmoid",
+      "expected_calibration_error": 0.01605064384877779,
+      "log_loss": 0.08446353158358995,
       "model_type": "logistic_regression",
-      "n_calibration": 1375,
+      "n_calibration": 650,
       "n_test": 1510,
       "n_train": 4355,
-      "prevalence": 0.025827814569536423
+      "prevalence": 0.025827814569536423,
+      "reliability_bins": [
+        {
+          "absolute_gap": 0.01143508103179084,
+          "count": 1442,
+          "lower": 0.0,
+          "mean_predicted": 0.003128025764325665,
+          "observed_rate": 0.014563106796116505,
+          "upper": 0.1
+        },
+        {
+          "absolute_gap": 0.09048427306921594,
+          "count": 30,
+          "lower": 0.1,
+          "mean_predicted": 0.1428490602641174,
+          "observed_rate": 0.23333333333333334,
+          "upper": 0.2
+        },
+        {
+          "absolute_gap": 0.10919363513471259,
+          "count": 15,
+          "lower": 0.2,
+          "mean_predicted": 0.24252696846804592,
+          "observed_rate": 0.13333333333333333,
+          "upper": 0.30000000000000004
+        },
+        {
+          "absolute_gap": 0.04967678446261309,
+          "count": 10,
+          "lower": 0.30000000000000004,
+          "mean_predicted": 0.3496767844626131,
+          "observed_rate": 0.3,
+          "upper": 0.4
+        },
+        {
+          "absolute_gap": 0.08851985656822436,
+          "count": 2,
+          "lower": 0.4,
+          "mean_predicted": 0.41148014343177564,
+          "observed_rate": 0.5,
+          "upper": 0.5
+        },
+        {
+          "absolute_gap": 0.05150595025525595,
+          "count": 4,
+          "lower": 0.5,
+          "mean_predicted": 0.551505950255256,
+          "observed_rate": 0.5,
+          "upper": 0.6000000000000001
+        },
+        {
+          "absolute_gap": 0.02268230889775602,
+          "count": 3,
+          "lower": 0.6000000000000001,
+          "mean_predicted": 0.6439843577689106,
+          "observed_rate": 0.6666666666666666,
+          "upper": 0.7000000000000001
+        },
+        {
+          "absolute_gap": 0.7574549643526565,
+          "count": 2,
+          "lower": 0.7000000000000001,
+          "mean_predicted": 0.7574549643526565,
+          "observed_rate": 0.0,
+          "upper": 0.8
+        },
+        {
+          "absolute_gap": 0.8633959121030098,
+          "count": 1,
+          "lower": 0.8,
+          "mean_predicted": 0.8633959121030098,
+          "observed_rate": 0.0,
+          "upper": 0.9
+        },
+        {
+          "absolute_gap": 0.06846851842971158,
+          "count": 1,
+          "lower": 0.9,
+          "mean_predicted": 0.9315314815702884,
+          "observed_rate": 1.0,
+          "upper": 1.0
+        }
+      ]
     },
     "static_only": {
       "auprc": 0.10902378708759443,
       "auroc": 0.8198155798427722,
-      "brier": 0.09238786104608207,
+      "brier": 0.02425405071872285,
+      "calibration_method": "platt_sigmoid",
+      "expected_calibration_error": 0.0173966877349578,
+      "log_loss": 0.1245283489673734,
       "model_type": "logistic_regression",
-      "n_calibration": 1375,
+      "n_calibration": 650,
       "n_test": 1510,
       "n_train": 4355,
-      "prevalence": 0.025827814569536423
+      "prevalence": 0.025827814569536423,
+      "reliability_bins": [
+        {
+          "absolute_gap": 0.0173966877349578,
+          "count": 1510,
+          "lower": 0.0,
+          "mean_predicted": 0.008431126834578622,
+          "observed_rate": 0.025827814569536423,
+          "upper": 0.1
+        },
+        {
+          "absolute_gap": null,
+          "count": 0,
+          "lower": 0.1,
+          "mean_predicted": null,
+          "observed_rate": null,
+          "upper": 0.2
+        },
+        {
+          "absolute_gap": null,
+          "count": 0,
+          "lower": 0.2,
+          "mean_predicted": null,
+          "observed_rate": null,
+          "upper": 0.30000000000000004
+        },
+        {
+          "absolute_gap": null,
+          "count": 0,
+          "lower": 0.30000000000000004,
+          "mean_predicted": null,
+          "observed_rate": null,
+          "upper": 0.4
+        },
+        {
+          "absolute_gap": null,
+          "count": 0,
+          "lower": 0.4,
+          "mean_predicted": null,
+          "observed_rate": null,
+          "upper": 0.5
+        },
+        {
+          "absolute_gap": null,
+          "count": 0,
+          "lower": 0.5,
+          "mean_predicted": null,
+          "observed_rate": null,
+          "upper": 0.6000000000000001
+        },
+        {
+          "absolute_gap": null,
+          "count": 0,
+          "lower": 0.6000000000000001,
+          "mean_predicted": null,
+          "observed_rate": null,
+          "upper": 0.7000000000000001
+        },
+        {
+          "absolute_gap": null,
+          "count": 0,
+          "lower": 0.7000000000000001,
+          "mean_predicted": null,
+          "observed_rate": null,
+          "upper": 0.8
+        },
+        {
+          "absolute_gap": null,
+          "count": 0,
+          "lower": 0.8,
+          "mean_predicted": null,
+          "observed_rate": null,
+          "upper": 0.9
+        },
+        {
+          "absolute_gap": null,
+          "count": 0,
+          "lower": 0.9,
+          "mean_predicted": null,
+          "observed_rate": null,
+          "upper": 1.0
+        }
+      ]
+    }
+  },
+  "models_before_probability_calibration": {
+    "fusion": {
+      "auprc": 0.2765234711821107,
+      "auroc": 0.9432969025083233,
+      "brier": 0.05034969312142747,
+      "calibration_method": "platt_sigmoid",
+      "expected_calibration_error": 0.05814244834166825,
+      "log_loss": 0.18465867455266186,
+      "model_type": "logistic_regression",
+      "n_calibration": 650,
+      "n_test": 1510,
+      "n_train": 4355,
+      "prevalence": 0.025827814569536423,
+      "reliability_bins": [
+        {
+          "absolute_gap": 0.0014645535279399352,
+          "count": 1302,
+          "lower": 0.0,
+          "mean_predicted": 0.003911790558081571,
+          "observed_rate": 0.005376344086021506,
+          "upper": 0.1
+        },
+        {
+          "absolute_gap": 0.0955904204121218,
+          "count": 41,
+          "lower": 0.1,
+          "mean_predicted": 0.14437090821699985,
+          "observed_rate": 0.04878048780487805,
+          "upper": 0.2
+        },
+        {
+          "absolute_gap": 0.24986137816914145,
+          "count": 28,
+          "lower": 0.2,
+          "mean_predicted": 0.24986137816914145,
+          "observed_rate": 0.0,
+          "upper": 0.30000000000000004
+        },
+        {
+          "absolute_gap": 0.27709478272769594,
+          "count": 14,
+          "lower": 0.30000000000000004,
+          "mean_predicted": 0.3485233541562674,
+          "observed_rate": 0.07142857142857142,
+          "upper": 0.4
+        },
+        {
+          "absolute_gap": 0.2667229023403163,
+          "count": 11,
+          "lower": 0.4,
+          "mean_predicted": 0.44854108415849814,
+          "observed_rate": 0.18181818181818182,
+          "upper": 0.5
+        },
+        {
+          "absolute_gap": 0.39767053824679277,
+          "count": 13,
+          "lower": 0.5,
+          "mean_predicted": 0.5515166920929466,
+          "observed_rate": 0.15384615384615385,
+          "upper": 0.6000000000000001
+        },
+        {
+          "absolute_gap": 0.5736998644312822,
+          "count": 14,
+          "lower": 0.6000000000000001,
+          "mean_predicted": 0.6451284358598536,
+          "observed_rate": 0.07142857142857142,
+          "upper": 0.7000000000000001
+        },
+        {
+          "absolute_gap": 0.6598070281350583,
+          "count": 11,
+          "lower": 0.7000000000000001,
+          "mean_predicted": 0.7507161190441493,
+          "observed_rate": 0.09090909090909091,
+          "upper": 0.8
+        },
+        {
+          "absolute_gap": 0.5829164902671442,
+          "count": 23,
+          "lower": 0.8,
+          "mean_predicted": 0.8437860554845354,
+          "observed_rate": 0.2608695652173913,
+          "upper": 0.9
+        },
+        {
+          "absolute_gap": 0.6470409793981295,
+          "count": 53,
+          "lower": 0.9,
+          "mean_predicted": 0.9677956963792617,
+          "observed_rate": 0.32075471698113206,
+          "upper": 1.0
+        }
+      ]
+    },
+    "persistence": {
+      "auprc": 0.025827814569536423,
+      "auroc": 0.5,
+      "brier": 0.02536656803817136,
+      "expected_calibration_error": 0.014346758312360762,
+      "log_loss": 0.12662354331610562,
+      "method": "constant train-patient event prevalence persistence comparator",
+      "n_calibration": 0,
+      "n_test": 1510,
+      "n_train": 4355,
+      "prevalence": 0.025827814569536423,
+      "reliability_bins": [
+        {
+          "absolute_gap": 0.014346758312360762,
+          "count": 1510,
+          "lower": 0.0,
+          "mean_predicted": 0.011481056257175661,
+          "observed_rate": 0.025827814569536423,
+          "upper": 0.1
+        },
+        {
+          "absolute_gap": null,
+          "count": 0,
+          "lower": 0.1,
+          "mean_predicted": null,
+          "observed_rate": null,
+          "upper": 0.2
+        },
+        {
+          "absolute_gap": null,
+          "count": 0,
+          "lower": 0.2,
+          "mean_predicted": null,
+          "observed_rate": null,
+          "upper": 0.30000000000000004
+        },
+        {
+          "absolute_gap": null,
+          "count": 0,
+          "lower": 0.30000000000000004,
+          "mean_predicted": null,
+          "observed_rate": null,
+          "upper": 0.4
+        },
+        {
+          "absolute_gap": null,
+          "count": 0,
+          "lower": 0.4,
+          "mean_predicted": null,
+          "observed_rate": null,
+          "upper": 0.5
+        },
+        {
+          "absolute_gap": null,
+          "count": 0,
+          "lower": 0.5,
+          "mean_predicted": null,
+          "observed_rate": null,
+          "upper": 0.6000000000000001
+        },
+        {
+          "absolute_gap": null,
+          "count": 0,
+          "lower": 0.6000000000000001,
+          "mean_predicted": null,
+          "observed_rate": null,
+          "upper": 0.7000000000000001
+        },
+        {
+          "absolute_gap": null,
+          "count": 0,
+          "lower": 0.7000000000000001,
+          "mean_predicted": null,
+          "observed_rate": null,
+          "upper": 0.8
+        },
+        {
+          "absolute_gap": null,
+          "count": 0,
+          "lower": 0.8,
+          "mean_predicted": null,
+          "observed_rate": null,
+          "upper": 0.9
+        },
+        {
+          "absolute_gap": null,
+          "count": 0,
+          "lower": 0.9,
+          "mean_predicted": null,
+          "observed_rate": null,
+          "upper": 1.0
+        }
+      ]
+    },
+    "sensor": {
+      "auprc": 0.3075571777794596,
+      "auroc": 0.949920688873782,
+      "brier": 0.08475995754987997,
+      "calibration_method": "platt_sigmoid",
+      "expected_calibration_error": 0.11706070349089276,
+      "log_loss": 0.27528833419531756,
+      "model_type": "logistic_regression",
+      "n_calibration": 650,
+      "n_test": 1510,
+      "n_train": 4355,
+      "prevalence": 0.025827814569536423,
+      "reliability_bins": [
+        {
+          "absolute_gap": 0.0064452050921256785,
+          "count": 1160,
+          "lower": 0.0,
+          "mean_predicted": 0.00730727405764292,
+          "observed_rate": 0.0008620689655172414,
+          "upper": 0.1
+        },
+        {
+          "absolute_gap": 0.12252147491588858,
+          "count": 42,
+          "lower": 0.1,
+          "mean_predicted": 0.1463309987254124,
+          "observed_rate": 0.023809523809523808,
+          "upper": 0.2
+        },
+        {
+          "absolute_gap": 0.2442331384990088,
+          "count": 38,
+          "lower": 0.2,
+          "mean_predicted": 0.2442331384990088,
+          "observed_rate": 0.0,
+          "upper": 0.30000000000000004
+        },
+        {
+          "absolute_gap": 0.3170854781035944,
+          "count": 35,
+          "lower": 0.30000000000000004,
+          "mean_predicted": 0.34565690667502297,
+          "observed_rate": 0.02857142857142857,
+          "upper": 0.4
+        },
+        {
+          "absolute_gap": 0.4216060414412431,
+          "count": 30,
+          "lower": 0.4,
+          "mean_predicted": 0.4549393747745764,
+          "observed_rate": 0.03333333333333333,
+          "upper": 0.5
+        },
+        {
+          "absolute_gap": 0.5119097607288658,
+          "count": 27,
+          "lower": 0.5,
+          "mean_predicted": 0.5489467977659029,
+          "observed_rate": 0.037037037037037035,
+          "upper": 0.6000000000000001
+        },
+        {
+          "absolute_gap": 0.6169191994855996,
+          "count": 27,
+          "lower": 0.6000000000000001,
+          "mean_predicted": 0.6539562365226367,
+          "observed_rate": 0.037037037037037035,
+          "upper": 0.7000000000000001
+        },
+        {
+          "absolute_gap": 0.5648925132408171,
+          "count": 33,
+          "lower": 0.7000000000000001,
+          "mean_predicted": 0.7467106950589989,
+          "observed_rate": 0.18181818181818182,
+          "upper": 0.8
+        },
+        {
+          "absolute_gap": 0.6922398071054676,
+          "count": 38,
+          "lower": 0.8,
+          "mean_predicted": 0.8501345439475729,
+          "observed_rate": 0.15789473684210525,
+          "upper": 0.9
+        },
+        {
+          "absolute_gap": 0.6960917830668027,
+          "count": 80,
+          "lower": 0.9,
+          "mean_predicted": 0.9585917830668027,
+          "observed_rate": 0.2625,
+          "upper": 1.0
+        }
+      ]
+    },
+    "static": {
+      "auprc": 0.10902378708759443,
+      "auroc": 0.8198155798427722,
+      "brier": 0.09238786104608207,
+      "calibration_method": "platt_sigmoid",
+      "expected_calibration_error": 0.10724989620029007,
+      "log_loss": 0.2750658059149155,
+      "model_type": "logistic_regression",
+      "n_calibration": 650,
+      "n_test": 1510,
+      "n_train": 4355,
+      "prevalence": 0.025827814569536423,
+      "reliability_bins": [
+        {
+          "absolute_gap": 0.0025370389679727733,
+          "count": 1260,
+          "lower": 0.0,
+          "mean_predicted": 0.012060848491782298,
+          "observed_rate": 0.009523809523809525,
+          "upper": 0.1
+        },
+        {
+          "absolute_gap": null,
+          "count": 0,
+          "lower": 0.1,
+          "mean_predicted": null,
+          "observed_rate": null,
+          "upper": 0.2
+        },
+        {
+          "absolute_gap": null,
+          "count": 0,
+          "lower": 0.2,
+          "mean_predicted": null,
+          "observed_rate": null,
+          "upper": 0.30000000000000004
+        },
+        {
+          "absolute_gap": null,
+          "count": 0,
+          "lower": 0.30000000000000004,
+          "mean_predicted": null,
+          "observed_rate": null,
+          "upper": 0.4
+        },
+        {
+          "absolute_gap": null,
+          "count": 0,
+          "lower": 0.4,
+          "mean_predicted": null,
+          "observed_rate": null,
+          "upper": 0.5
+        },
+        {
+          "absolute_gap": 0.5250838318140657,
+          "count": 111,
+          "lower": 0.5,
+          "mean_predicted": 0.5881468948771288,
+          "observed_rate": 0.06306306306306306,
+          "upper": 0.6000000000000001
+        },
+        {
+          "absolute_gap": null,
+          "count": 0,
+          "lower": 0.6000000000000001,
+          "mean_predicted": null,
+          "observed_rate": null,
+          "upper": 0.7000000000000001
+        },
+        {
+          "absolute_gap": null,
+          "count": 0,
+          "lower": 0.7000000000000001,
+          "mean_predicted": null,
+          "observed_rate": null,
+          "upper": 0.8
+        },
+        {
+          "absolute_gap": 0.7227796318807986,
+          "count": 139,
+          "lower": 0.8,
+          "mean_predicted": 0.8666645239671296,
+          "observed_rate": 0.14388489208633093,
+          "upper": 0.9
+        },
+        {
+          "absolute_gap": null,
+          "count": 0,
+          "lower": 0.9,
+          "mean_predicted": null,
+          "observed_rate": null,
+          "upper": 1.0
+        }
+      ]
     }
   },
   "personalization": {
@@ -546,7 +2035,7 @@
     "alpha_by_horizon": {
       "120": 0.25,
       "30": 0.0,
-      "60": 0.25
+      "60": 0.0
     },
     "candidate_alphas": [
       0.0,
@@ -557,10 +2046,12 @@
     ],
     "clinical_interpretation": "adaptive residual, not a clinically identified insulin-sensitivity model",
     "enabled": true,
-    "fit_split": "calibration patients only",
+    "fit_split": "training patients only for global model",
     "history_size": 4,
+    "interval_split": "calibration-interval patients only for conformal widths",
     "method": "bounded online per-patient residual correction",
-    "test_policy": "residuals are eligible only after their target timestamp is observed"
+    "test_policy": "residuals are eligible only after their target timestamp is observed",
+    "tuning_split": "calibration-tuning patients only for residual shrinkage"
   },
   "personalized": true,
   "seed": 2026

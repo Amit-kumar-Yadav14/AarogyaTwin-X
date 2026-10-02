@@ -1,5 +1,5 @@
 {
-  "artifact_version": "aarogya-day2-bundle-v1",
+  "artifact_version": "aarogya-day3-bundle-v1",
   "bundle": "bundle.joblib",
   "engine_loads_without_training": true,
   "metrics": "metrics.json",
