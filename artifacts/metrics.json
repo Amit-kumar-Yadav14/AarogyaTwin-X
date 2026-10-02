@@ -1,4 +1,235 @@
 {
+  "ablations": {
+    "event_classification": {
+      "fusion": {
+        "auprc": 0.2765234711821107,
+        "auroc": 0.9432969025083233,
+        "brier": 0.05034969312142747,
+        "model_type": "logistic_regression",
+        "n_calibration": 1375,
+        "n_test": 1510,
+        "n_train": 4355,
+        "prevalence": 0.025827814569536423
+      },
+      "persistence": {
+        "auprc": 0.025827814569536423,
+        "auroc": 0.5,
+        "brier": 0.02536656803817136,
+        "method": "constant train-patient event prevalence persistence comparator",
+        "model_type": "constant_train_prevalence",
+        "n_calibration": 0,
+        "n_test": 1510,
+        "n_train": 4355,
+        "prevalence": 0.025827814569536423
+      },
+      "sensor_only": {
+        "auprc": 0.3075571777794596,
+        "auroc": 0.949920688873782,
+        "brier": 0.08475995754987997,
+        "model_type": "logistic_regression",
+        "n_calibration": 1375,
+        "n_test": 1510,
+        "n_train": 4355,
+        "prevalence": 0.025827814569536423
+      },
+      "static_only": {
+        "auprc": 0.10902378708759443,
+        "auroc": 0.8198155798427722,
+        "brier": 0.09238786104608207,
+        "model_type": "logistic_regression",
+        "n_calibration": 1375,
+        "n_test": 1510,
+        "n_train": 4355,
+        "prevalence": 0.025827814569536423
+      }
+    },
+    "forecast": {
+      "day1_summary": {
+        "120": {
+          "empirical_coverage": 0.8964013086150491,
+          "horizon_minutes": 120,
+          "interval_coverage_target": 0.9,
+          "mae": 8.664649054088622,
+          "mean_interval_width": 35.191202985521954,
+          "model_type": "HistGradientBoostingRegressor_day1_summary",
+          "n_calibration": 2742,
+          "n_test": 2751,
+          "n_train": 8220,
+          "rmse": 11.302352540725645
+        },
+        "30": {
+          "empirical_coverage": 0.8947368421052632,
+          "horizon_minutes": 30,
+          "interval_coverage_target": 0.9,
+          "mae": 7.20717269523249,
+          "mean_interval_width": 29.43353854866922,
+          "model_type": "HistGradientBoostingRegressor_day1_summary",
+          "n_calibration": 2740,
+          "n_test": 2755,
+          "n_train": 8217,
+          "rmse": 9.715810415324814
+        },
+        "60": {
+          "empirical_coverage": 0.8986928104575164,
+          "horizon_minutes": 60,
+          "interval_coverage_target": 0.9,
+          "mae": 7.907359769111929,
+          "mean_interval_width": 32.16469565751436,
+          "model_type": "HistGradientBoostingRegressor_day1_summary",
+          "n_calibration": 2741,
+          "n_test": 2754,
+          "n_train": 8219,
+          "rmse": 10.451596174076451
+        }
+      },
+      "last_observed_glucose": {
+        "120": {
+          "empirical_coverage": null,
+          "horizon_minutes": 120,
+          "interval_coverage_target": 0.9,
+          "mae": 14.0258112537725,
+          "mean_interval_width": null,
+          "method": "last observed CGM, no learned future information",
+          "n_test": 2751,
+          "rmse": 18.681317107970482
+        },
+        "30": {
+          "empirical_coverage": null,
+          "horizon_minutes": 30,
+          "interval_coverage_target": 0.9,
+          "mae": 9.728833616891343,
+          "mean_interval_width": null,
+          "method": "last observed CGM, no learned future information",
+          "n_test": 2755,
+          "rmse": 14.093216039230862
+        },
+        "60": {
+          "empirical_coverage": null,
+          "horizon_minutes": 60,
+          "interval_coverage_target": 0.9,
+          "mae": 12.265565313397031,
+          "mean_interval_width": null,
+          "method": "last observed CGM, no learned future information",
+          "n_test": 2754,
+          "rmse": 17.18356225814993
+        }
+      },
+      "patient_mean_glucose": {
+        "120": {
+          "empirical_coverage": null,
+          "horizon_minutes": 120,
+          "interval_coverage_target": 0.9,
+          "mae": 11.564711610749084,
+          "mean_interval_width": null,
+          "method": "patient running mean of observed glucose through the anchor",
+          "n_test": 2751,
+          "rmse": 15.25726526958952
+        },
+        "30": {
+          "empirical_coverage": null,
+          "horizon_minutes": 30,
+          "interval_coverage_target": 0.9,
+          "mae": 11.264477448324785,
+          "mean_interval_width": null,
+          "method": "patient running mean of observed glucose through the anchor",
+          "n_test": 2755,
+          "rmse": 14.986305883215998
+        },
+        "60": {
+          "empirical_coverage": null,
+          "horizon_minutes": 60,
+          "interval_coverage_target": 0.9,
+          "mae": 11.380521578147306,
+          "mean_interval_width": null,
+          "method": "patient running mean of observed glucose through the anchor",
+          "n_test": 2754,
+          "rmse": 15.088706995279452
+        }
+      },
+      "temporal_lags_causal_residual": {
+        "120": {
+          "alpha": 0.25,
+          "empirical_coverage": 0.8953107960741549,
+          "history_size": 4,
+          "horizon_minutes": 120,
+          "interval_coverage_target": 0.9,
+          "mae": 8.380893309177633,
+          "mean_interval_width": 34.144243720748165,
+          "model_type": "temporal_lags_with_causal_residual",
+          "n_calibration": 2742,
+          "n_test": 2751,
+          "n_train": 8220,
+          "rmse": 11.001138719003468
+        },
+        "30": {
+          "alpha": 0.0,
+          "empirical_coverage": 0.8983666061705989,
+          "history_size": 4,
+          "horizon_minutes": 30,
+          "interval_coverage_target": 0.9,
+          "mae": 7.209908534743265,
+          "mean_interval_width": 29.82323062149709,
+          "model_type": "temporal_lags_with_causal_residual",
+          "n_calibration": 2740,
+          "n_test": 2755,
+          "n_train": 8217,
+          "rmse": 9.760710022622806
+        },
+        "60": {
+          "alpha": 0.25,
+          "empirical_coverage": 0.8990559186637618,
+          "history_size": 4,
+          "horizon_minutes": 60,
+          "interval_coverage_target": 0.9,
+          "mae": 7.858670555076107,
+          "mean_interval_width": 32.32344996591982,
+          "model_type": "temporal_lags_with_causal_residual",
+          "n_calibration": 2741,
+          "n_test": 2754,
+          "n_train": 8219,
+          "rmse": 10.441340149966528
+        }
+      },
+      "temporal_lags_no_personalization": {
+        "120": {
+          "empirical_coverage": 0.8993093420574336,
+          "horizon_minutes": 120,
+          "interval_coverage_target": 0.9,
+          "mae": 8.602376478798774,
+          "mean_interval_width": 35.377013097149955,
+          "model_type": "HistGradientBoostingRegressor_temporal_lags",
+          "n_calibration": 2742,
+          "n_test": 2751,
+          "n_train": 8220,
+          "rmse": 11.25315007288381
+        },
+        "30": {
+          "empirical_coverage": 0.8983666061705989,
+          "horizon_minutes": 30,
+          "interval_coverage_target": 0.9,
+          "mae": 7.209908534743265,
+          "mean_interval_width": 29.82323062149709,
+          "model_type": "HistGradientBoostingRegressor_temporal_lags",
+          "n_calibration": 2740,
+          "n_test": 2755,
+          "n_train": 8217,
+          "rmse": 9.760710022622806
+        },
+        "60": {
+          "empirical_coverage": 0.8936092955700798,
+          "horizon_minutes": 60,
+          "interval_coverage_target": 0.9,
+          "mae": 7.854340906415378,
+          "mean_interval_width": 32.05600415852928,
+          "model_type": "HistGradientBoostingRegressor_temporal_lags",
+          "n_calibration": 2741,
+          "n_test": 2754,
+          "n_train": 8219,
+          "rmse": 10.41507227415458
+        }
+      }
+    }
+  },
   "cohort": {
     "days": 5,
     "patients": 60,
@@ -18,9 +249,9 @@
   },
   "conformal": {
     "absolute_residual_widths": {
-      "120": 17.595601492760977,
-      "30": 14.71676927433461,
-      "60": 16.08234782875718
+      "120": 17.072121860374082,
+      "30": 14.911615310748545,
+      "60": 16.16172498295991
     },
     "calibration_population": "calibration patients only",
     "coverage_target": 0.9
@@ -39,12 +270,56 @@
   },
   "forecast": {
     "120": {
+      "alpha": 0.25,
+      "empirical_coverage": 0.8953107960741549,
+      "history_size": 4,
+      "horizon_minutes": 120,
+      "interval_coverage_target": 0.9,
+      "mae": 8.380893309177633,
+      "mean_interval_width": 34.144243720748165,
+      "model_type": "temporal_lags_with_causal_residual",
+      "n_calibration": 2742,
+      "n_test": 2751,
+      "n_train": 8220,
+      "rmse": 11.001138719003468
+    },
+    "30": {
+      "alpha": 0.0,
+      "empirical_coverage": 0.8983666061705989,
+      "history_size": 4,
+      "horizon_minutes": 30,
+      "interval_coverage_target": 0.9,
+      "mae": 7.209908534743265,
+      "mean_interval_width": 29.82323062149709,
+      "model_type": "temporal_lags_with_causal_residual",
+      "n_calibration": 2740,
+      "n_test": 2755,
+      "n_train": 8217,
+      "rmse": 9.760710022622806
+    },
+    "60": {
+      "alpha": 0.25,
+      "empirical_coverage": 0.8990559186637618,
+      "history_size": 4,
+      "horizon_minutes": 60,
+      "interval_coverage_target": 0.9,
+      "mae": 7.858670555076107,
+      "mean_interval_width": 32.32344996591982,
+      "model_type": "temporal_lags_with_causal_residual",
+      "n_calibration": 2741,
+      "n_test": 2754,
+      "n_train": 8219,
+      "rmse": 10.441340149966528
+    }
+  },
+  "forecast_baseline": {
+    "120": {
       "empirical_coverage": 0.8964013086150491,
       "horizon_minutes": 120,
       "interval_coverage_target": 0.9,
       "mae": 8.664649054088622,
       "mean_interval_width": 35.191202985521954,
-      "model_type": "HistGradientBoostingRegressor",
+      "model_type": "HistGradientBoostingRegressor_day1_summary",
       "n_calibration": 2742,
       "n_test": 2751,
       "n_train": 8220,
@@ -56,7 +331,7 @@
       "interval_coverage_target": 0.9,
       "mae": 7.20717269523249,
       "mean_interval_width": 29.43353854866922,
-      "model_type": "HistGradientBoostingRegressor",
+      "model_type": "HistGradientBoostingRegressor_day1_summary",
       "n_calibration": 2740,
       "n_test": 2755,
       "n_train": 8217,
@@ -68,11 +343,116 @@
       "interval_coverage_target": 0.9,
       "mae": 7.907359769111929,
       "mean_interval_width": 32.16469565751436,
-      "model_type": "HistGradientBoostingRegressor",
+      "model_type": "HistGradientBoostingRegressor_day1_summary",
       "n_calibration": 2741,
       "n_test": 2754,
       "n_train": 8219,
       "rmse": 10.451596174076451
+    }
+  },
+  "forecast_before_personalization": {
+    "120": {
+      "empirical_coverage": 0.8993093420574336,
+      "horizon_minutes": 120,
+      "interval_coverage_target": 0.9,
+      "mae": 8.602376478798774,
+      "mean_interval_width": 35.377013097149955,
+      "model_type": "HistGradientBoostingRegressor_temporal_lags",
+      "n_calibration": 2742,
+      "n_test": 2751,
+      "n_train": 8220,
+      "rmse": 11.25315007288381
+    },
+    "30": {
+      "empirical_coverage": 0.8983666061705989,
+      "horizon_minutes": 30,
+      "interval_coverage_target": 0.9,
+      "mae": 7.209908534743265,
+      "mean_interval_width": 29.82323062149709,
+      "model_type": "HistGradientBoostingRegressor_temporal_lags",
+      "n_calibration": 2740,
+      "n_test": 2755,
+      "n_train": 8217,
+      "rmse": 9.760710022622806
+    },
+    "60": {
+      "empirical_coverage": 0.8936092955700798,
+      "horizon_minutes": 60,
+      "interval_coverage_target": 0.9,
+      "mae": 7.854340906415378,
+      "mean_interval_width": 32.05600415852928,
+      "model_type": "HistGradientBoostingRegressor_temporal_lags",
+      "n_calibration": 2741,
+      "n_test": 2754,
+      "n_train": 8219,
+      "rmse": 10.41507227415458
+    }
+  },
+  "forecast_model": "temporal lag features plus causal-in-time residual correction",
+  "forecast_naive_baselines": {
+    "last_observed_glucose": {
+      "120": {
+        "empirical_coverage": null,
+        "horizon_minutes": 120,
+        "interval_coverage_target": 0.9,
+        "mae": 14.0258112537725,
+        "mean_interval_width": null,
+        "method": "last observed CGM, no learned future information",
+        "n_test": 2751,
+        "rmse": 18.681317107970482
+      },
+      "30": {
+        "empirical_coverage": null,
+        "horizon_minutes": 30,
+        "interval_coverage_target": 0.9,
+        "mae": 9.728833616891343,
+        "mean_interval_width": null,
+        "method": "last observed CGM, no learned future information",
+        "n_test": 2755,
+        "rmse": 14.093216039230862
+      },
+      "60": {
+        "empirical_coverage": null,
+        "horizon_minutes": 60,
+        "interval_coverage_target": 0.9,
+        "mae": 12.265565313397031,
+        "mean_interval_width": null,
+        "method": "last observed CGM, no learned future information",
+        "n_test": 2754,
+        "rmse": 17.18356225814993
+      }
+    },
+    "patient_mean_glucose": {
+      "120": {
+        "empirical_coverage": null,
+        "horizon_minutes": 120,
+        "interval_coverage_target": 0.9,
+        "mae": 11.564711610749084,
+        "mean_interval_width": null,
+        "method": "patient running mean of observed glucose through the anchor",
+        "n_test": 2751,
+        "rmse": 15.25726526958952
+      },
+      "30": {
+        "empirical_coverage": null,
+        "horizon_minutes": 30,
+        "interval_coverage_target": 0.9,
+        "mae": 11.264477448324785,
+        "mean_interval_width": null,
+        "method": "patient running mean of observed glucose through the anchor",
+        "n_test": 2755,
+        "rmse": 14.986305883215998
+      },
+      "60": {
+        "empirical_coverage": null,
+        "horizon_minutes": 60,
+        "interval_coverage_target": 0.9,
+        "mae": 11.380521578147306,
+        "mean_interval_width": null,
+        "method": "patient running mean of observed glucose through the anchor",
+        "n_test": 2754,
+        "rmse": 15.088706995279452
+      }
     }
   },
   "forecast_persistence": {
@@ -114,7 +494,9 @@
     "Future label/target readings with missing CGM are excluded rather than treated as negative or normal.",
     "The event endpoint is a project-specific strict-above-180 mg/dL sustained episode definition, not a universal clinical definition.",
     "No causal treatment effect, medication recommendation, diagnosis, or clinical validation is provided.",
-    "Personalized residual calibration is disabled for Day 1 because a separately validated past-only calibration path is not established."
+    "The residual correction is an adaptive online residual, not a clinically identified insulin-sensitivity model.",
+    "Residual shrinkage is selected on calibration patients; test residuals are used only after their target timestamps are observed.",
+    "Naive forecast baselines use only the last observed glucose or the running patient glucose mean through each anchor; they do not use future values."
   ],
   "models": {
     "fusion": {
@@ -159,6 +541,27 @@
       "prevalence": 0.025827814569536423
     }
   },
-  "personalized": false,
+  "personalization": {
+    "adjustment_clip_mg_dl": 30.0,
+    "alpha_by_horizon": {
+      "120": 0.25,
+      "30": 0.0,
+      "60": 0.25
+    },
+    "candidate_alphas": [
+      0.0,
+      0.25,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "clinical_interpretation": "adaptive residual, not a clinically identified insulin-sensitivity model",
+    "enabled": true,
+    "fit_split": "calibration patients only",
+    "history_size": 4,
+    "method": "bounded online per-patient residual correction",
+    "test_policy": "residuals are eligible only after their target timestamp is observed"
+  },
+  "personalized": true,
   "seed": 2026
 }

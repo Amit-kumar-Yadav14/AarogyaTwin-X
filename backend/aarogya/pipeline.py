@@ -1,4 +1,4 @@
-"""Train and persist the CPU-first Day-1 AarogyaTwin-X baselines.
+"""Train and persist the CPU-first Day-2 AarogyaTwin-X baselines.
 
 Run from a checkout with ``backend`` on ``PYTHONPATH`` (or with the backend as
 the working directory):
@@ -44,13 +44,16 @@ from .simulation import (
 )
 
 
-ARTIFACT_VERSION = "aarogya-day1-bundle-v1"
+ARTIFACT_VERSION = "aarogya-day2-bundle-v1"
 CONFORMAL_COVERAGE_TARGET = 0.90
 SAMPLE_INTERVAL_STEPS = 30 // STEP_MINUTES
 MIN_PATIENTS = 3
 MIN_DAYS = 1
 MAX_PATIENTS = 500
 MAX_DAYS = 14
+RESIDUAL_ALPHA_GRID = (0.0, 0.25, 0.5, 0.75, 1.0)
+RESIDUAL_HISTORY_SIZE = 4
+RESIDUAL_ADJUSTMENT_CLIP = 30.0
 
 
 @dataclass
@@ -59,6 +62,7 @@ class Sample:
     split: str
     anchor_step: int
     features: dict[str, np.ndarray]
+    patient_mean_glucose: float | None
     event: int | None
     targets: dict[int, float | None]
 
@@ -98,6 +102,11 @@ def _build_samples(cohort: Mapping[str, Any]) -> list[Sample]:
         last_anchor = glucose.size - max_horizon - 1
         for anchor in range(0, max(0, last_anchor + 1), SAMPLE_INTERVAL_STEPS):
             vectors = feature_vectors(record, anchor, observations)
+            past_glucose = glucose[: anchor + 1]
+            finite_past_glucose = past_glucose[np.isfinite(past_glucose)]
+            patient_mean_glucose = (
+                float(np.mean(finite_past_glucose)) if finite_past_glucose.size else None
+            )
             label = event_label(glucose, anchor)
             targets: dict[int, float | None] = {}
             for horizon, offset in zip(FORECAST_HORIZONS_MINUTES, FORECAST_HORIZON_STEPS):
@@ -112,6 +121,7 @@ def _build_samples(cohort: Mapping[str, Any]) -> list[Sample]:
                     split=str(record["split"]),
                     anchor_step=anchor,
                     features=vectors,
+                    patient_mean_glucose=patient_mean_glucose,
                     event=label,
                     targets=targets,
                 )
@@ -245,6 +255,139 @@ def _predict_regressor(spec: Mapping[str, Any], matrix: np.ndarray) -> np.ndarra
     return np.clip(np.asarray(spec["estimator"].predict_value(transformed), dtype=float), 40.0, 400.0)
 
 
+def _online_personalized_predictions(
+    spec: Mapping[str, Any],
+    samples: Sequence[Sample],
+    split: str,
+    horizon: int,
+    alpha: float,
+    history_size: int,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, list[Sample]]:
+    """Predict a split in time order using only matured prior residuals.
+
+    A residual from an earlier anchor becomes eligible only when that earlier
+    target timestamp is at or before the current anchor. The global model is
+    never refit here, and residual history is maintained separately per patient.
+    """
+
+    feature_kind = str(spec.get("feature_kind", "temporal"))
+    offset = int(horizon // STEP_MINUTES)
+    selected = [
+        sample
+        for sample in samples
+        if sample.split == split
+        and sample.targets.get(horizon) is not None
+        and math.isfinite(float(sample.targets[horizon]))
+    ]
+    selected.sort(key=lambda sample: (sample.patient_id, sample.anchor_step))
+    residual_history: dict[str, list[tuple[int, float]]] = {}
+    targets: list[float] = []
+    base_predictions: list[float] = []
+    adjusted_predictions: list[float] = []
+
+    for sample in selected:
+        matrix = np.asarray(sample.features[feature_kind], dtype=float).reshape(1, -1)
+        base_values = _predict_regressor(spec, matrix)
+        if base_values.size == 0 or not np.isfinite(base_values[0]):
+            continue
+        base = float(base_values[0])
+        history = residual_history.setdefault(sample.patient_id, [])
+        matured = [error for ready_at, error in history if ready_at <= sample.anchor_step]
+        if history_size > 0:
+            matured = matured[-history_size:]
+        residual = float(np.mean(matured)) if matured else 0.0
+        adjustment = float(np.clip(float(alpha) * residual, -RESIDUAL_ADJUSTMENT_CLIP, RESIDUAL_ADJUSTMENT_CLIP))
+        target = float(sample.targets[horizon])
+        adjusted = float(np.clip(base + adjustment, 40.0, 400.0))
+        targets.append(target)
+        base_predictions.append(base)
+        adjusted_predictions.append(adjusted)
+        # Store a base-model residual only after this forecast's target would be
+        # observable. It cannot affect this row or any earlier anchor.
+        history.append((sample.anchor_step + offset, target - base))
+
+    return (
+        np.asarray(targets, dtype=float),
+        np.asarray(base_predictions, dtype=float),
+        np.asarray(adjusted_predictions, dtype=float),
+        selected,
+    )
+
+
+def _fit_residual_personalization(
+    specs: Mapping[int, Mapping[str, Any]],
+    samples: Sequence[Sample],
+) -> tuple[dict[str, Any], dict[str, dict[str, Any]], dict[int, float | None]]:
+    """Choose shrinkage on calibration patients and evaluate online on test patients."""
+
+    alpha_by_horizon: dict[str, float] = {}
+    measured: dict[str, dict[str, Any]] = {}
+    widths: dict[int, float | None] = {}
+    for horizon in FORECAST_HORIZONS_MINUTES:
+        spec = specs[horizon]
+        best_alpha = 0.0
+        best_mae = math.inf
+        for alpha in RESIDUAL_ALPHA_GRID:
+            calibration_target, _, calibration_prediction, _ = _online_personalized_predictions(
+                spec,
+                samples,
+                "calibration",
+                horizon,
+                alpha,
+                RESIDUAL_HISTORY_SIZE,
+            )
+            if calibration_target.size == 0:
+                continue
+            mae = float(mean_absolute_error(calibration_target, calibration_prediction))
+            # Prefer the smaller adjustment on an exact tie.
+            if mae < best_mae - 1e-12 or (math.isclose(mae, best_mae) and alpha < best_alpha):
+                best_alpha = float(alpha)
+                best_mae = mae
+
+        alpha_by_horizon[str(horizon)] = best_alpha
+        calibration_target, _, calibration_prediction, _ = _online_personalized_predictions(
+            spec,
+            samples,
+            "calibration",
+            horizon,
+            best_alpha,
+            RESIDUAL_HISTORY_SIZE,
+        )
+        test_target, _, test_prediction, _ = _online_personalized_predictions(
+            spec,
+            samples,
+            "test",
+            horizon,
+            best_alpha,
+            RESIDUAL_HISTORY_SIZE,
+        )
+        width = _split_conformal_width(
+            np.abs(calibration_target - calibration_prediction),
+            CONFORMAL_COVERAGE_TARGET,
+        )
+        widths[horizon] = width
+        measured[str(horizon)] = _forecast_metrics(test_target, test_prediction, width)
+        measured[str(horizon)]["horizon_minutes"] = int(horizon)
+        measured[str(horizon)]["model_type"] = "temporal_lags_with_causal_residual"
+        measured[str(horizon)]["alpha"] = best_alpha
+        measured[str(horizon)]["history_size"] = RESIDUAL_HISTORY_SIZE
+        measured[str(horizon)]["n_train"] = int(spec.get("n_train", 0))
+        measured[str(horizon)]["n_calibration"] = int(calibration_target.size)
+
+    config = {
+        "enabled": True,
+        "method": "bounded online per-patient residual correction",
+        "alpha_by_horizon": alpha_by_horizon,
+        "candidate_alphas": list(RESIDUAL_ALPHA_GRID),
+        "history_size": RESIDUAL_HISTORY_SIZE,
+        "adjustment_clip_mg_dl": RESIDUAL_ADJUSTMENT_CLIP,
+        "fit_split": "calibration patients only",
+        "test_policy": "residuals are eligible only after their target timestamp is observed",
+        "clinical_interpretation": "adaptive residual, not a clinically identified insulin-sensitivity model",
+    }
+    return config, measured, widths
+
+
 def _fit_classification_models(
     samples: Sequence[Sample],
     seed: int,
@@ -297,14 +440,17 @@ def _fit_classification_models(
     return model_specs, measured
 
 
-def _fit_regression_models(
+def _fit_regression_family(
     samples: Sequence[Sample],
     seed: int,
+    kind: str,
+    model_label: str,
 ) -> tuple[dict[int, dict[str, Any]], dict[str, dict[str, Any]], dict[int, float | None]]:
+    """Fit one leakage-safe forecast family and calibrate it on calibration patients."""
+
     specs: dict[int, dict[str, Any]] = {}
     measured: dict[str, dict[str, Any]] = {}
     widths: dict[int, float | None] = {}
-    kind = "fusion"
     for offset, horizon in enumerate(FORECAST_HORIZONS_MINUTES):
         train_x, train_y, _ = _rows(samples, "train", kind, target_horizon=horizon)
         calibration_x, calibration_y, _ = _rows(samples, "calibration", kind, target_horizon=horizon)
@@ -338,13 +484,36 @@ def _fit_regression_models(
         measured[str(horizon)] = _forecast_metrics(test_y, test_prediction, width)
         measured[str(horizon)]["horizon_minutes"] = int(horizon)
         measured[str(horizon)]["model_type"] = (
-            "HistGradientBoostingRegressor"
-            if estimator.model is not None
-            else "constant_fallback"
+            model_label if estimator.model is not None else "constant_fallback"
         )
         measured[str(horizon)]["n_train"] = int(train_y.size)
         measured[str(horizon)]["n_calibration"] = int(calibration_y.size)
     return specs, measured, widths
+
+
+def _fit_regression_models(
+    samples: Sequence[Sample],
+    seed: int,
+) -> tuple[dict[int, dict[str, Any]], dict[str, dict[str, Any]], dict[int, float | None]]:
+    return _fit_regression_family(
+        samples,
+        seed,
+        kind="temporal",
+        model_label="HistGradientBoostingRegressor_temporal_lags",
+    )
+
+
+def _fit_baseline_regression_models(
+    samples: Sequence[Sample],
+    seed: int,
+) -> tuple[dict[str, dict[str, Any]], dict[int, float | None]]:
+    _, measured, widths = _fit_regression_family(
+        samples,
+        seed + 500,
+        kind="fusion",
+        model_label="HistGradientBoostingRegressor_day1_summary",
+    )
+    return measured, widths
 
 
 def _persistence_forecast_metrics(
@@ -373,12 +542,41 @@ def _persistence_forecast_metrics(
     return result
 
 
+def _patient_mean_forecast_metrics(
+    samples: Sequence[Sample],
+    horizon: int,
+    train_fallback: float | None,
+) -> dict[str, Any]:
+    """Measure a patient running-mean forecast using anchor-visible glucose only."""
+
+    _, target, selected = _rows(samples, "test", "fusion", target_horizon=horizon)
+    if not selected:
+        return _forecast_metrics(np.empty(0), np.empty(0), None)
+    fallback = 0.0 if train_fallback is None else float(train_fallback)
+    prediction = np.asarray(
+        [
+            float(sample.patient_mean_glucose)
+            if sample.patient_mean_glucose is not None and math.isfinite(sample.patient_mean_glucose)
+            else fallback
+            for sample in selected
+        ],
+        dtype=float,
+    )
+    result = _forecast_metrics(target, prediction, None)
+    result["horizon_minutes"] = int(horizon)
+    result["method"] = "patient running mean of observed glucose through the anchor"
+    return result
+
+
 def _build_metrics(
     cohort: Mapping[str, Any],
     samples: Sequence[Sample],
     classification_metrics: Mapping[str, Mapping[str, Any]],
     regression_metrics: Mapping[str, Mapping[str, Any]],
     widths: Mapping[int, float | None],
+    baseline_regression_metrics: Mapping[str, Mapping[str, Any]],
+    before_personalization_metrics: Mapping[str, Mapping[str, Any]],
+    personalization: Mapping[str, Any],
 ) -> dict[str, Any]:
     records = cohort["patients"]
     split_counts: dict[str, int] = {"train": 0, "calibration": 0, "test": 0}
@@ -398,6 +596,18 @@ def _build_metrics(
         str(horizon): _persistence_forecast_metrics(samples, horizon, train_fallback)
         for horizon in FORECAST_HORIZONS_MINUTES
     }
+    train_patient_means = [
+        float(sample.patient_mean_glucose)
+        for sample in samples
+        if sample.split == "train"
+        and sample.patient_mean_glucose is not None
+        and math.isfinite(sample.patient_mean_glucose)
+    ]
+    train_patient_mean_fallback = safe_mean(train_patient_means)
+    patient_mean_forecast = {
+        str(horizon): _patient_mean_forecast_metrics(samples, horizon, train_patient_mean_fallback)
+        for horizon in FORECAST_HORIZONS_MINUTES
+    }
 
     model_results: dict[str, Any] = {
         "static_only": {"model_type": "logistic_regression", **dict(classification_metrics["static"])},
@@ -413,7 +623,9 @@ def _build_metrics(
         "Future label/target readings with missing CGM are excluded rather than treated as negative or normal.",
         "The event endpoint is a project-specific strict-above-180 mg/dL sustained episode definition, not a universal clinical definition.",
         "No causal treatment effect, medication recommendation, diagnosis, or clinical validation is provided.",
-        "Personalized residual calibration is disabled for Day 1 because a separately validated past-only calibration path is not established.",
+        "The residual correction is an adaptive online residual, not a clinically identified insulin-sensitivity model.",
+        "Residual shrinkage is selected on calibration patients; test residuals are used only after their target timestamps are observed.",
+        "Naive forecast baselines use only the last observed glucose or the running patient glucose mean through each anchor; they do not use future values.",
     ]
     metrics: dict[str, Any] = {
         "data_mode": "synthetic",
@@ -433,8 +645,26 @@ def _build_metrics(
         "event_definition": dict(EVENT_DEFINITION),
         "models": model_results,
         "forecast": {str(key): dict(value) for key, value in regression_metrics.items()},
+        "forecast_before_personalization": {str(key): dict(value) for key, value in before_personalization_metrics.items()},
+        "forecast_baseline": {str(key): dict(value) for key, value in baseline_regression_metrics.items()},
         "forecast_persistence": persistence_forecast,
-        "personalized": False,
+        "forecast_naive_baselines": {
+            "last_observed_glucose": persistence_forecast,
+            "patient_mean_glucose": patient_mean_forecast,
+        },
+        "ablations": {
+            "event_classification": {str(key): dict(value) for key, value in model_results.items()},
+            "forecast": {
+                "day1_summary": {str(key): dict(value) for key, value in baseline_regression_metrics.items()},
+                "temporal_lags_no_personalization": {str(key): dict(value) for key, value in before_personalization_metrics.items()},
+                "temporal_lags_causal_residual": {str(key): dict(value) for key, value in regression_metrics.items()},
+                "last_observed_glucose": persistence_forecast,
+                "patient_mean_glucose": patient_mean_forecast,
+            },
+        },
+        "forecast_model": "temporal lag features plus causal-in-time residual correction",
+        "personalization": dict(personalization),
+        "personalized": bool(personalization.get("enabled", False)),
         "conformal": {
             "coverage_target": CONFORMAL_COVERAGE_TARGET,
             "absolute_residual_widths": {str(key): value for key, value in widths.items()},
@@ -472,7 +702,8 @@ def _build_provenance(
             "observed_streams": ["cgm", "heart_rate", "hrv", "sleep_hours", "activity", "meal_carbs"],
             "hidden_simulator_parameters_as_features": False,
             "calibration": "split-conformal absolute residual widths from calibration patients only",
-            "personalization": False,
+            "personalization": metrics.get("personalization", {}),
+            "ablations": "event feature-group and forecast baseline comparisons are measured on the held-out test split",
             "network_dependency": False,
             "python": platform.python_version(),
             "platform": platform.platform(),
@@ -487,7 +718,7 @@ def build_artifacts(
     days: int = 5,
     seed: int = 2026,
 ) -> dict[str, Any]:
-    """Generate, train, and persist a reloadable Day-1 artifact bundle."""
+    """Generate, train, and persist a reloadable Day-2 artifact bundle."""
 
     patients, days, seed = _validate_config(patients, days, seed)
     output_path = Path(output)
@@ -498,8 +729,22 @@ def build_artifacts(
     cohort = generate_cohort(patients=patients, days=days, seed=seed)
     samples = _build_samples(cohort)
     classification_specs, classification_metrics = _fit_classification_models(samples, seed)
-    regression_specs, regression_metrics, widths = _fit_regression_models(samples, seed)
-    metrics = _build_metrics(cohort, samples, classification_metrics, regression_metrics, widths)
+    regression_specs, before_personalization_metrics, base_widths = _fit_regression_models(samples, seed)
+    personalization, regression_metrics, widths = _fit_residual_personalization(
+        regression_specs,
+        samples,
+    )
+    baseline_regression_metrics, _ = _fit_baseline_regression_models(samples, seed)
+    metrics = _build_metrics(
+        cohort,
+        samples,
+        classification_metrics,
+        regression_metrics,
+        widths,
+        baseline_regression_metrics,
+        before_personalization_metrics,
+        personalization,
+    )
     provenance = _build_provenance(cohort, metrics, output_path)
 
     bundle = {
@@ -522,6 +767,8 @@ def build_artifacts(
         "classification_models": classification_specs,
         "regression_models": regression_specs,
         "conformal_widths": {int(key): value for key, value in widths.items()},
+        "base_conformal_widths": {int(key): value for key, value in base_widths.items()},
+        "residual_personalization": personalization,
         "metrics": metrics,
         "provenance": provenance,
     }

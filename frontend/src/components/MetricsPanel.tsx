@@ -50,8 +50,11 @@ function topValue(metrics: MetricsPayload, key: string): unknown {
 export function MetricsPanel({ metrics, loading, error, onRetry }: MetricsPanelProps) {
   const rows: FlatMetric[] = [];
   if (metrics) {
-    flatten(metrics.models ?? null, 'Models', rows);
-    flatten(metrics.forecast ?? null, 'Forecast', rows);
+    flatten(metrics.models ?? null, 'Event models', rows);
+    flatten(metrics.forecast ?? null, 'Forecast · temporal + residual', rows);
+    flatten(metrics.forecast_before_personalization ?? null, 'Forecast · temporal without residual', rows);
+    flatten(metrics.forecast_baseline ?? null, 'Forecast · Day-1 summary baseline', rows);
+    flatten(metrics.forecast_naive_baselines ?? null, 'Forecast · naive baselines', rows);
   }
   const cohort = asRecord(metrics?.cohort);
   const cohortRows = cohort ? Object.entries(cohort).slice(0, 6) : [];

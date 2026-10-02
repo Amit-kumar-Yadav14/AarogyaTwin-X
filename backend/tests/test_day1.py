@@ -2,12 +2,13 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import numpy as np
 from fastapi.testclient import TestClient
 
 from aarogya.api import create_app
 from aarogya.engine import TwinEngine
 from aarogya.pipeline import build_artifacts
-from aarogya.simulation import event_label
+from aarogya.simulation import event_label, feature_vectors, generate_cohort
 
 
 def test_event_label_obeys_strict_threshold_and_unknown_missing_data() -> None:
@@ -22,6 +23,20 @@ def test_event_label_obeys_strict_threshold_and_unknown_missing_data() -> None:
     assert event_label(already_above, 0) is None
 
 
+def test_temporal_features_are_past_only() -> None:
+    cohort = generate_cohort(patients=3, days=2, seed=2026)
+    record = next(iter(cohort["patients"].values()))
+    anchor = 120
+    original = {name: np.asarray(values, dtype=float).copy() for name, values in record["observations"].items()}
+    altered = {name: values.copy() for name, values in original.items()}
+    for values in altered.values():
+        values[anchor + 1 :] = 999999.0
+
+    before = feature_vectors(record, anchor, original)
+    after = feature_vectors(record, anchor, altered)
+    assert np.array_equal(before["temporal"], after["temporal"], equal_nan=True)
+
+
 def test_pipeline_persists_reloadable_held_out_engine(tmp_path: Path) -> None:
     artifact_dir = tmp_path / "artifacts"
     metrics = build_artifacts(artifact_dir, patients=6, days=2, seed=2026)
@@ -30,6 +45,21 @@ def test_pipeline_persists_reloadable_held_out_engine(tmp_path: Path) -> None:
     assert (artifact_dir / "metrics.json").is_file()
     assert metrics["data_mode"] == "synthetic"
     assert metrics["cohort"]["split_counts"]["test"] == 2
+    assert metrics["forecast"]["30"]["model_type"] == "temporal_lags_with_causal_residual"
+    assert metrics["forecast_before_personalization"]["30"]["model_type"] == "HistGradientBoostingRegressor_temporal_lags"
+    assert metrics["forecast_baseline"]["30"]["model_type"] == "HistGradientBoostingRegressor_day1_summary"
+    assert metrics["personalized"] is True
+    assert metrics["personalization"]["fit_split"] == "calibration patients only"
+    naive = metrics["forecast_naive_baselines"]
+    assert set(naive) == {"last_observed_glucose", "patient_mean_glucose"}
+    assert all(set(results) == {"30", "60", "120"} for results in naive.values())
+    assert set(metrics["ablations"]["forecast"]) == {
+        "day1_summary",
+        "temporal_lags_no_personalization",
+        "temporal_lags_causal_residual",
+        "last_observed_glucose",
+        "patient_mean_glucose",
+    }
 
     engine = TwinEngine(artifact_dir)
     patients = engine.list_patients()
@@ -41,6 +71,7 @@ def test_pipeline_persists_reloadable_held_out_engine(tmp_path: Path) -> None:
     assert snapshot["status"]["twin"] == "ready"
     assert [point["minutes_ahead"] for point in snapshot["forecast"]] == [30, 60, 120]
     assert snapshot["predictions"]["available"] is True
+    assert snapshot["predictions"]["personalized"] is True
 
     dropout = engine.snapshot(
         patients[0]["id"],
@@ -51,6 +82,24 @@ def test_pipeline_persists_reloadable_held_out_engine(tmp_path: Path) -> None:
     assert dropout["predictions"]["available"] is False
     assert dropout["forecast"] == []
     assert dropout["predictions"]["risk_120m"] is None
+
+
+def test_personalization_ignores_future_observations(tmp_path: Path) -> None:
+    artifact_dir = tmp_path / "future-isolation-artifacts"
+    build_artifacts(artifact_dir, patients=6, days=2, seed=2026)
+    engine = TwinEngine(artifact_dir)
+    patient = engine.list_patients()[0]
+    step = patient["default_step"]
+    before = engine.snapshot(patient["id"], step=step)
+
+    record = engine._patients[patient["id"]]
+    future_index = step // 5 + 1
+    for values in record["observations"].values():
+        values[future_index:] = 999999.0
+
+    after = engine.snapshot(patient["id"], step=step)
+    assert before["forecast"] == after["forecast"]
+    assert before["predictions"]["risk_120m"] == after["predictions"]["risk_120m"]
 
 
 def test_api_exposes_local_contract_and_failure_state(tmp_path: Path) -> None:

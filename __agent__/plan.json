@@ -2,26 +2,30 @@
   "schema_version": 1,
   "items": [
     {
-      "title": "Inspect implementation and project checks",
+      "title": "Inspect Day-1 temporal baseline and checks",
       "status": "done"
     },
     {
-      "title": "Implement synthetic pipeline and leakage-aware baseline",
+      "title": "Implement a better CPU-friendly temporal model",
       "status": "done"
     },
     {
-      "title": "Implement local API and dashboard integration",
+      "title": "Measure Task-1 synthetic held-out comparison",
       "status": "done"
     },
     {
-      "title": "Add focused tests and run real checks",
+      "title": "Implement causal-in-time residual personalization",
       "status": "done"
     },
     {
-      "title": "Report Day-1 results and remaining gaps",
+      "title": "Add and measure Day-2 ablations",
+      "status": "done"
+    },
+    {
+      "title": "Run final checks and report Day-2 results",
       "status": "done"
     }
   ],
-  "updated_at": "2026-10-02T10:16:00.487Z",
+  "updated_at": "2026-10-02T12:17:34.424Z",
   "session_id": "01a0fbf1-4dcd-73eb-98a0-64b10e66ed3a"
 }

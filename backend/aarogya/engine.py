@@ -22,7 +22,7 @@ from .simulation import (
 )
 
 
-MODEL_VERSION = "day1-cpu-baselines-v1"
+MODEL_VERSION = "day2-temporal-residual-v1"
 INTERVAL_METHOD = "split-conformal absolute residuals (90%; calibration patients only)"
 RISK_SEMANTICS = (
     "Estimated probability of the contract-defined new sustained >180 mg/dL event within 120 minutes; "
@@ -88,6 +88,7 @@ class TwinEngine:
         self._classification_models = bundle.get("classification_models", {})
         self._regression_models = bundle.get("regression_models", {})
         self._conformal_widths = bundle.get("conformal_widths", {})
+        self._residual_personalization = bundle.get("residual_personalization", {})
         self._metrics = json_safe(bundle.get("metrics", {}))
         self._provenance = bundle.get("provenance", {})
         self._step_minutes = int(bundle.get("config", {}).get("step_minutes", 5))
@@ -161,6 +162,57 @@ class TwinEngine:
 
         return [json_safe(deepcopy(self._public_patient(self._patients[patient_id]))) for patient_id in self._test_ids]
 
+    def _past_residual_adjustment(
+        self,
+        record: Mapping[str, Any],
+        current_step: int,
+        observations: Mapping[str, np.ndarray],
+        horizon: int,
+        spec: Mapping[str, Any],
+    ) -> float:
+        """Reconstruct a bounded residual using only matured past targets."""
+
+        config = self._residual_personalization
+        if not isinstance(config, Mapping) or not bool(config.get("enabled", False)):
+            return 0.0
+        alpha_values = config.get("alpha_by_horizon", {})
+        alpha = _number(alpha_values.get(horizon, alpha_values.get(str(horizon))) if isinstance(alpha_values, Mapping) else None, 0.0)
+        history_size = int(_number(config.get("history_size"), 0.0) or 0)
+        adjustment_clip = _number(config.get("adjustment_clip_mg_dl"), 30.0) or 30.0
+        if history_size <= 0 or alpha is None or abs(alpha) <= 1e-12:
+            return 0.0
+
+        offset = int(horizon // self._step_minutes)
+        anchor_interval = max(1, 30 // self._step_minutes)
+        glucose = np.asarray(observations.get("glucose", np.empty(0, dtype=float)), dtype=float)
+        residual_history: list[tuple[int, float]] = []
+        for prior_anchor in range(0, int(current_step) + 1, anchor_interval):
+            target_index = prior_anchor + offset
+            if target_index > int(current_step) or target_index >= glucose.size:
+                continue
+            target = glucose[target_index]
+            if not np.isfinite(target):
+                continue
+            prior_vectors = feature_vectors(record, prior_anchor, observations)
+            feature_kind = str(spec.get("feature_kind", "fusion"))
+            raw_vector = prior_vectors.get(feature_kind, prior_vectors["fusion"])
+            try:
+                matrix = np.asarray(raw_vector, dtype=float).reshape(1, -1)
+                transformed = spec["preprocessor"].transform(matrix)
+                values = spec["estimator"].predict_value(transformed)
+                if not len(values) or not math.isfinite(float(values[0])):
+                    continue
+                base = float(np.clip(values[0], 40.0, 400.0))
+            except (KeyError, TypeError, ValueError, RuntimeError, AttributeError):
+                continue
+            residual_history.append((target_index, float(target) - base))
+
+        matured = [error for ready_at, error in residual_history if ready_at <= int(current_step)]
+        if not matured:
+            return 0.0
+        residual = float(np.mean(matured[-history_size:]))
+        return float(np.clip(float(alpha) * residual, -adjustment_clip, adjustment_clip))
+
     def _model_outputs(
         self,
         record: Mapping[str, Any],
@@ -190,10 +242,21 @@ class TwinEngine:
             if not isinstance(spec, Mapping):
                 continue
             try:
-                transformed = spec["preprocessor"].transform(fusion)
+                feature_kind = str(spec.get("feature_kind", "fusion"))
+                raw_vector = vectors.get(feature_kind, vectors["fusion"])
+                forecast_matrix = np.asarray(raw_vector, dtype=float).reshape(1, -1)
+                transformed = spec["preprocessor"].transform(forecast_matrix)
                 values = spec["estimator"].predict_value(transformed)
                 if len(values) and math.isfinite(float(values[0])):
-                    predictions[horizon] = float(np.clip(values[0], 40.0, 400.0))
+                    base_prediction = float(np.clip(values[0], 40.0, 400.0))
+                    adjustment = self._past_residual_adjustment(
+                        record,
+                        step,
+                        observations,
+                        horizon,
+                        spec,
+                    )
+                    predictions[horizon] = float(np.clip(base_prediction + adjustment, 40.0, 400.0))
             except (KeyError, TypeError, ValueError, RuntimeError, AttributeError):
                 continue
         reason = None
@@ -301,6 +364,8 @@ class TwinEngine:
         if predictions_available:
             warnings.append("Predicted peak is the maximum of sampled 30/60/120-minute heads, not a guaranteed future peak.")
         warnings.append("Context drivers are observations, not causal attribution.")
+        if bool(self._residual_personalization.get("enabled", False)):
+            warnings.append("A bounded causal-in-time residual adjustment may use matured past forecast errors; it is not a clinical insulin-sensitivity model.")
 
         steps_60m = float(np.nansum(np.nan_to_num(activity_window, nan=0.0))) if activity_window.size else 0.0
         sleep_value = 0.0 if last_sleep is None else last_sleep
@@ -330,7 +395,7 @@ class TwinEngine:
             "interval_method": INTERVAL_METHOD
             if all(self._interval_width(self._conformal_widths, horizon) is not None for horizon in FORECAST_HORIZONS_MINUTES)
             else "split-conformal interval unavailable for one or more horizons",
-            "personalized": False,
+            "personalized": bool(self._residual_personalization.get("enabled", False)),
         }
 
         drivers = [
@@ -380,7 +445,7 @@ class TwinEngine:
             "simulation_version": str(self._provenance.get("simulation_version", "synthetic-day1-v1")),
             "calibration_split": "patient-disjoint calibration patients; split-conformal widths",
             "risk_semantics": RISK_SEMANTICS,
-            "explanation": "Day-1 CPU baselines; personalized residual calibration is disabled and drivers are observed context only.",
+            "explanation": "Day-2 CPU temporal lag model with bounded causal-in-time residual personalization; this is an adaptive residual, not a clinically identified insulin-sensitivity model. Drivers remain observed context only.",
         }
         result = {
             "patient": self._public_patient(record),

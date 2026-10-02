@@ -533,17 +533,68 @@ def sensor_feature_vector(
     return np.asarray([np.nan if value is None else value for value in values], dtype=float), names
 
 
+def temporal_feature_vector(
+    observations: Mapping[str, Sequence[float] | np.ndarray],
+    anchor_step: int,
+) -> tuple[np.ndarray, list[str]]:
+    """Build explicit past-only lags for the temporal forecast model.
+
+    The feature grid is intentionally small and CPU-friendly: six lags from the
+    current observation back to 60 minutes, plus recent glucose changes. Every
+    lookup is bounded by ``anchor_step``; future observations are never visible.
+    """
+
+    arrays = {name: np.asarray(values, dtype=float) for name, values in observations.items()}
+    names_by_stream = (
+        ("glucose", "cgm"),
+        ("heart_rate", "heart_rate"),
+        ("hrv", "hrv"),
+        ("sleep_hours", "sleep_hours"),
+        ("activity", "activity"),
+        ("meal_carbs", "meal_carbs"),
+    )
+    lags = (0, 1, 2, 3, 6, 12)
+    values: list[float] = []
+    names: list[str] = []
+
+    for public_name, source_name in names_by_stream:
+        source = arrays.get(public_name, arrays.get(source_name, np.empty(0, dtype=float)))
+        for lag in lags:
+            index = int(anchor_step) - lag
+            value = source[index] if 0 <= index < source.size else np.nan
+            values.append(float(value) if np.isfinite(value) else np.nan)
+            names.append(f"{public_name}_lag_{lag * STEP_MINUTES}m")
+
+    glucose = arrays.get("glucose", arrays.get("cgm", np.empty(0, dtype=float)))
+    current_index = int(anchor_step)
+    current = glucose[current_index] if 0 <= current_index < glucose.size else np.nan
+    for lag in (3, 6, 12):
+        index = current_index - lag
+        previous = glucose[index] if 0 <= index < glucose.size else np.nan
+        delta = current - previous if np.isfinite(current) and np.isfinite(previous) else np.nan
+        values.append(float(delta) if np.isfinite(delta) else np.nan)
+        names.append(f"cgm_change_{lag * STEP_MINUTES}m")
+
+    return np.asarray(values, dtype=float), names
+
+
 def feature_vectors(
     record: Mapping[str, Any],
     anchor_step: int,
     observations: Mapping[str, Sequence[float] | np.ndarray] | None = None,
 ) -> dict[str, np.ndarray]:
-    """Return static, sensor, and fusion vectors for a past-only anchor."""
+    """Return static, sensor, temporal, and fusion vectors for a past-only anchor."""
 
     visible = observations if observations is not None else record["observations"]
     static, _ = static_feature_vector(record)
     sensor, _ = sensor_feature_vector(visible, int(anchor_step))
-    return {"static": static, "sensor": sensor, "fusion": np.concatenate([static, sensor])}
+    temporal, _ = temporal_feature_vector(visible, int(anchor_step))
+    return {
+        "static": static,
+        "sensor": sensor,
+        "temporal": np.concatenate([static, sensor, temporal]),
+        "fusion": np.concatenate([static, sensor]),
+    }
 
 
 def feature_names() -> dict[str, list[str]]:
@@ -552,11 +603,18 @@ def feature_names() -> dict[str, list[str]]:
     _, static_names = static_feature_vector(
         {"age": 0, "bmi": 0, "hba1c": 0, "diabetes_years": 0, "sex": "F", "medications": []}
     )
-    _, sensor_names = sensor_feature_vector(
-        {name: np.zeros(1, dtype=float) for name in ("glucose", "heart_rate", "hrv", "sleep_hours", "activity", "meal_carbs")},
-        0,
-    )
-    return {"static": static_names, "sensor": sensor_names, "fusion": static_names + sensor_names}
+    zero_observations = {
+        name: np.zeros(13, dtype=float)
+        for name in ("glucose", "heart_rate", "hrv", "sleep_hours", "activity", "meal_carbs")
+    }
+    _, sensor_names = sensor_feature_vector(zero_observations, 0)
+    _, temporal_names = temporal_feature_vector(zero_observations, 0)
+    return {
+        "static": static_names,
+        "sensor": sensor_names,
+        "temporal": static_names + sensor_names + temporal_names,
+        "fusion": static_names + sensor_names,
+    }
 
 
 def copy_observations_up_to(
@@ -642,5 +700,6 @@ __all__ = [
     "last_observed_age_minutes",
     "sensor_feature_vector",
     "static_feature_vector",
+    "temporal_feature_vector",
     "timestamp_for_step",
 ]
