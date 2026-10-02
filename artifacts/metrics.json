@@ -1,0 +1,164 @@
+{
+  "cohort": {
+    "days": 5,
+    "patients": 60,
+    "replay_step_unit": "elapsed_minutes",
+    "sample_counts": {
+      "calibration": 2832,
+      "test": 2832,
+      "train": 8496
+    },
+    "sample_interval_minutes": 30,
+    "split_counts": {
+      "calibration": 12,
+      "test": 12,
+      "train": 36
+    },
+    "step_minutes": 5
+  },
+  "conformal": {
+    "absolute_residual_widths": {
+      "120": 17.595601492760977,
+      "30": 14.71676927433461,
+      "60": 16.08234782875718
+    },
+    "calibration_population": "calibration patients only",
+    "coverage_target": 0.9
+  },
+  "data_mode": "synthetic",
+  "event_definition": {
+    "anchor_requirement": "anchor glucose is observed and <= 180 mg/dL",
+    "comparison": ">",
+    "confirmation_span_minutes": 15,
+    "consecutive_readings": 4,
+    "description": "four consecutive readings strictly >180 mg/dL within the future 120-minute window",
+    "forecast_window_minutes": 120,
+    "missing_future_policy": "exclude from labels, never treat as a negative",
+    "reading_interval_minutes": 5,
+    "threshold_mg_dl": 180.0
+  },
+  "forecast": {
+    "120": {
+      "empirical_coverage": 0.8964013086150491,
+      "horizon_minutes": 120,
+      "interval_coverage_target": 0.9,
+      "mae": 8.664649054088622,
+      "mean_interval_width": 35.191202985521954,
+      "model_type": "HistGradientBoostingRegressor",
+      "n_calibration": 2742,
+      "n_test": 2751,
+      "n_train": 8220,
+      "rmse": 11.302352540725645
+    },
+    "30": {
+      "empirical_coverage": 0.8947368421052632,
+      "horizon_minutes": 30,
+      "interval_coverage_target": 0.9,
+      "mae": 7.20717269523249,
+      "mean_interval_width": 29.43353854866922,
+      "model_type": "HistGradientBoostingRegressor",
+      "n_calibration": 2740,
+      "n_test": 2755,
+      "n_train": 8217,
+      "rmse": 9.715810415324814
+    },
+    "60": {
+      "empirical_coverage": 0.8986928104575164,
+      "horizon_minutes": 60,
+      "interval_coverage_target": 0.9,
+      "mae": 7.907359769111929,
+      "mean_interval_width": 32.16469565751436,
+      "model_type": "HistGradientBoostingRegressor",
+      "n_calibration": 2741,
+      "n_test": 2754,
+      "n_train": 8219,
+      "rmse": 10.451596174076451
+    }
+  },
+  "forecast_persistence": {
+    "120": {
+      "empirical_coverage": null,
+      "horizon_minutes": 120,
+      "interval_coverage_target": 0.9,
+      "mae": 14.0258112537725,
+      "mean_interval_width": null,
+      "method": "last observed CGM, no learned future information",
+      "n_test": 2751,
+      "rmse": 18.681317107970482
+    },
+    "30": {
+      "empirical_coverage": null,
+      "horizon_minutes": 30,
+      "interval_coverage_target": 0.9,
+      "mae": 9.728833616891343,
+      "mean_interval_width": null,
+      "method": "last observed CGM, no learned future information",
+      "n_test": 2755,
+      "rmse": 14.093216039230862
+    },
+    "60": {
+      "empirical_coverage": null,
+      "horizon_minutes": 60,
+      "interval_coverage_target": 0.9,
+      "mae": 12.265565313397031,
+      "mean_interval_width": null,
+      "method": "last observed CGM, no learned future information",
+      "n_test": 2754,
+      "rmse": 17.18356225814993
+    }
+  },
+  "limitations": [
+    "All records and labels are seeded synthetic development data, not clinical evidence.",
+    "Windows are sampled every 30 minutes but remain correlated within patients; row counts are not independent subjects.",
+    "Train, calibration, and test partitions are patient-disjoint; split-conformal widths use calibration patients only.",
+    "Future label/target readings with missing CGM are excluded rather than treated as negative or normal.",
+    "The event endpoint is a project-specific strict-above-180 mg/dL sustained episode definition, not a universal clinical definition.",
+    "No causal treatment effect, medication recommendation, diagnosis, or clinical validation is provided.",
+    "Personalized residual calibration is disabled for Day 1 because a separately validated past-only calibration path is not established."
+  ],
+  "models": {
+    "fusion": {
+      "auprc": 0.2765234711821107,
+      "auroc": 0.9432969025083233,
+      "brier": 0.05034969312142747,
+      "model_type": "logistic_regression",
+      "n_calibration": 1375,
+      "n_test": 1510,
+      "n_train": 4355,
+      "prevalence": 0.025827814569536423
+    },
+    "persistence": {
+      "auprc": 0.025827814569536423,
+      "auroc": 0.5,
+      "brier": 0.02536656803817136,
+      "method": "constant train-patient event prevalence persistence comparator",
+      "model_type": "constant_train_prevalence",
+      "n_calibration": 0,
+      "n_test": 1510,
+      "n_train": 4355,
+      "prevalence": 0.025827814569536423
+    },
+    "sensor_only": {
+      "auprc": 0.3075571777794596,
+      "auroc": 0.949920688873782,
+      "brier": 0.08475995754987997,
+      "model_type": "logistic_regression",
+      "n_calibration": 1375,
+      "n_test": 1510,
+      "n_train": 4355,
+      "prevalence": 0.025827814569536423
+    },
+    "static_only": {
+      "auprc": 0.10902378708759443,
+      "auroc": 0.8198155798427722,
+      "brier": 0.09238786104608207,
+      "model_type": "logistic_regression",
+      "n_calibration": 1375,
+      "n_test": 1510,
+      "n_train": 4355,
+      "prevalence": 0.025827814569536423
+    }
+  },
+  "personalized": false,
+  "seed": 2026
+}

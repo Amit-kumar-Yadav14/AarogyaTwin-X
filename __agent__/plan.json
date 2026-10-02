@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "items": [
+    {
+      "title": "Inspect implementation and project checks",
+      "status": "done"
+    },
+    {
+      "title": "Implement synthetic pipeline and leakage-aware baseline",
+      "status": "done"
+    },
+    {
+      "title": "Implement local API and dashboard integration",
+      "status": "done"
+    },
+    {
+      "title": "Add focused tests and run real checks",
+      "status": "done"
+    },
+    {
+      "title": "Report Day-1 results and remaining gaps",
+      "status": "done"
+    }
+  ],
+  "updated_at": "2026-10-02T10:16:00.487Z",
+  "session_id": "01a0fbf1-4dcd-73eb-98a0-64b10e66ed3a"
+}
