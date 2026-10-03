@@ -2,26 +2,26 @@
   "schema_version": 1,
   "items": [
     {
-      "title": "Inspect Day-3 calibration code and synthetic evidence (read-only)",
+      "title": "Write structured evidence summary from saved Day-3 results",
       "status": "done"
     },
     {
-      "title": "Implement and measure calibration (awaiting approval)",
+      "title": "Add Day-4 safety tests for existing boundaries",
       "status": "done"
     },
     {
-      "title": "Implement and measure missingness tests after approval",
+      "title": "Polish dashboard warning and state visibility only",
       "status": "done"
     },
     {
-      "title": "Implement and measure synthetic distribution-shift tests after approval",
+      "title": "Run one approved daily verification pass",
       "status": "done"
     },
     {
-      "title": "Implement and measure event-level alert metrics after approval",
+      "title": "Report Day-4 results and remaining gaps",
       "status": "done"
     }
   ],
-  "updated_at": "2026-10-02T19:29:27.931Z",
+  "updated_at": "2026-10-03T07:39:47.746Z",
   "session_id": "01a0fbf1-4dcd-73eb-98a0-64b10e66ed3a"
 }

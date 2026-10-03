@@ -88,7 +88,7 @@ export function MetricsPanel({ metrics, loading, error, onRetry }: MetricsPanelP
               {cohortRows.map(([key, value]) => <div key={key}><span>{metricKeyLabel(key)}</span><strong>{metricValue(value)}</strong></div>)}
             </div>
           )}
-          <div className="metrics-disclaimer"><Info size={15} aria-hidden="true" /><span>Null metric values mean the quantity was undefined or not measured. They are not zero performance.</span></div>
+          <div className="metrics-disclaimer" role="note"><Info size={15} aria-hidden="true" /><span>These are measured synthetic held-out results, not clinical performance. Null values mean the quantity was undefined or not measured; they are not zero performance.</span></div>
           {rows.length > 0 ? (
             <div className="metrics-table-wrap">
               <table className="data-table metrics-table">

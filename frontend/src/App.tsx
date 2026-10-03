@@ -40,9 +40,9 @@ function errorMessage(error: unknown): string {
     return `${error.message}${setupHint}`;
   }
   if (error instanceof Error && error.message) {
-    return `${error.message} If the local API is unavailable or artifacts are missing, start it and run scripts/train.ps1 from the project root.`;
+    return `${error.message} If the local API is unavailable or artifacts are missing, start it and run scripts/train.sh from the project root.`;
   }
-  return 'The local API returned an unexpected response. Start it and run scripts/train.ps1 from the project root if artifacts are missing.';
+  return 'The local API returned an unexpected response. Start it and run scripts/train.sh from the project root if artifacts are missing.';
 }
 
 function clamp(value: number, minimum: number, maximum: number): number {
@@ -308,7 +308,7 @@ export default function App() {
       <div className="app-main">
         <Header onMenu={() => setMobileOpen(true)} lastUpdated={snapshot?.timestamp ?? null} apiReady={apiReady} />
         <main className="main-content">
-          <div className="research-ribbon">
+          <div className="research-ribbon" role="note" aria-label="Synthetic data and clinical-use warning">
             <div className="research-ribbon-title"><ShieldAlert size={16} aria-hidden="true" /><strong>SYNTHETIC RESEARCH</strong></div>
             <span>All records, streams, forecasts, and metrics are synthetic.</span>
             <strong className="research-ribbon-warning">NOT FOR CLINICAL USE</strong>
@@ -335,7 +335,7 @@ export default function App() {
             />
             {patients.loading && <LoadingState label="Loading synthetic patient index" />}
             {patients.error && <ErrorState message={patients.error} onRetry={refreshWorkspace} />}
-            {!patients.loading && !patients.error && patientList.length === 0 && <ErrorState message="No synthetic patients were returned. Build the local artifacts with scripts/train.ps1, then retry." onRetry={refreshWorkspace} />}
+            {!patients.loading && !patients.error && patientList.length === 0 && <ErrorState message="No synthetic patients were returned. Build the local artifacts with scripts/train.sh, then retry." onRetry={refreshWorkspace} />}
             <PatientSelector
               patients={patientList}
               selectedPatient={selectedPatient}

@@ -125,6 +125,20 @@ def test_pipeline_persists_reloadable_held_out_engine(tmp_path: Path) -> None:
     assert dropout["predictions"]["available"] is False
     assert dropout["forecast"] == []
     assert dropout["predictions"]["risk_120m"] is None
+    assert dropout["predictions"]["glucose_30m"] is None
+    assert dropout["predictions"]["glucose_60m"] is None
+    assert dropout["predictions"]["glucose_120m"] is None
+    assert any("abstained" in warning.lower() for warning in dropout["warnings"])
+
+    scenario = engine.simulate(
+        patients[0]["id"],
+        step=patients[0]["default_step"],
+        activity_minutes=15,
+        meal_carbs=30,
+    )
+    assert scenario["baseline"] == snapshot["forecast"]
+    assert "not medical advice" in scenario["disclaimer"].lower()
+    assert any("dosing" in assumption.lower() for assumption in scenario["assumptions"])
 
 
 def test_personalization_ignores_future_observations(tmp_path: Path) -> None:
