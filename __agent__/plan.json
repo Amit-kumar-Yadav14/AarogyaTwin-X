@@ -2,26 +2,22 @@
   "schema_version": 1,
   "items": [
     {
-      "title": "Inspect Day-5 deliverables and local document tools",
+      "title": "Add vector diagrams to deck generator",
       "status": "done"
     },
     {
-      "title": "Refresh README and write architecture document",
+      "title": "Regenerate architecture and presentation decks",
       "status": "done"
     },
     {
-      "title": "Write presentation deck and video runbook",
+      "title": "Verify visual deck artifacts locally",
       "status": "done"
     },
     {
-      "title": "Run one fresh synthetic setup audit",
-      "status": "done"
-    },
-    {
-      "title": "Report Day-5 deliverables and verified checks",
+      "title": "Report repaired presentation files",
       "status": "done"
     }
   ],
-  "updated_at": "2026-10-03T09:02:29.113Z",
+  "updated_at": "2026-10-03T09:31:02.215Z",
   "session_id": "01a0fbf1-4dcd-73eb-98a0-64b10e66ed3a"
 }

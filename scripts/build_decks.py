@@ -38,6 +38,77 @@ def rect_shape(shape_no: int, name: str, x: int, y: int, w: int, h: int, color: 
     return f"""<p:sp><p:nvSpPr><p:cNvPr id=\"{shape_no}\" name=\"{esc(name)}\"/><p:cNvSpPr/><p:nvPr/></p:nvSpPr><p:spPr><a:xfrm><a:off x=\"{x}\" y=\"{y}\"/><a:ext cx=\"{w}\" cy=\"{h}\"/></a:xfrm><a:prstGeom prst=\"rect\"><a:avLst/></a:prstGeom><a:solidFill><a:srgbClr val=\"{color}\"/></a:solidFill><a:ln><a:noFill/></a:ln></p:spPr></p:sp>"""
 
 
+def diagram_card(shape_no: int, x: int, y: int, w: int, h: int, title: str, detail: str, color: str) -> str:
+    paragraphs = [
+        {"text": title, "bullet": False, "bold": True, "size": 14, "color": "FFFFFF"},
+        {"text": detail, "bullet": False, "size": 9, "color": "EAF4F5"},
+    ]
+    return (
+        rect_shape(shape_no, f"card-{shape_no}", x, y, w, h, color)
+        + text_shape(shape_no + 1, f"card-text-{shape_no}", x + int(0.10 * EMU_PER_INCH), y + int(0.10 * EMU_PER_INCH), w - int(0.20 * EMU_PER_INCH), h - int(0.20 * EMU_PER_INCH), paragraphs, 14, "FFFFFF")
+    )
+
+
+def diagram_arrow(shape_no: int, x: int, y: int, w: int = 260000, h: int = 430000) -> str:
+    return text_shape(shape_no, f"arrow-{shape_no}", x, y, w, h, [{"text": "→", "bullet": False, "bold": True, "size": 22, "color": VIOLET}], 22, VIOLET)
+
+
+def diagram_for(title: str) -> str:
+    """Return vector diagram shapes for the most important narrative slides."""
+    left = int(5.35 * EMU_PER_INCH)
+    top = int(1.55 * EMU_PER_INCH)
+    box_w = int(1.55 * EMU_PER_INCH)
+    box_h = int(1.12 * EMU_PER_INCH)
+    gap = int(0.22 * EMU_PER_INCH)
+    out: list[str] = []
+    sid = 20
+
+    def row(items: list[tuple[str, str, str]], y: int, cols: int = 4) -> None:
+        nonlocal sid
+        for index, (label, detail, color) in enumerate(items):
+            x = left + index * (box_w + gap)
+            out.append(diagram_card(sid, x, y, box_w, box_h, label, detail, color))
+            sid += 2
+            if index < len(items) - 1:
+                out.append(diagram_arrow(sid, x + box_w + int(0.01 * EMU_PER_INCH), y + int(0.31 * EMU_PER_INCH)))
+                sid += 1
+
+    if title == "End-to-end data flow":
+        row([("SIMULATE", "seed 2026", TEAL), ("SPLIT", "patients", VIOLET), ("FEATURE", "past-only", TEAL), ("MODEL", "CPU heads", VIOLET)], top)
+        row([("CALIBRATE", "probability + intervals", VIOLET), ("ENGINE", "artifact load", TEAL), ("API", "localhost", VIOLET), ("DASHBOARD", "replay + evidence", TEAL)], top + int(1.75 * EMU_PER_INCH))
+    elif title == "Synthetic data boundary":
+        row([("60 PATIENTS", "5 synthetic days", TEAL), ("CGM", "5-minute grid", VIOLET)], top, 2)
+        row([("CONTEXT", "HR / HRV / sleep", TEAL), ("MEALS + ACTIVITY", "observed streams", VIOLET)], top + int(1.75 * EMU_PER_INCH), 2)
+    elif title == "Leakage-aware evaluation":
+        row([("TRAIN", "36 patients", TEAL), ("TUNE", "6 patients", VIOLET), ("INTERVAL", "6 patients", TEAL), ("TEST", "12 held-out", "D58A36")], top)
+        out.append(diagram_card(sid, left, top + int(1.75 * EMU_PER_INCH), int(6.9 * EMU_PER_INCH), box_h, "RULE", "No test patient chooses a model setting; features stop at the replay anchor.", NAVY))
+    elif title in ("Model layers", "Model architecture"):
+        row([("FEATURES", "lags + context", TEAL), ("TEMPORAL", "glucose heads", VIOLET), ("EVENT", "fusion risk", TEAL), ("CALIBRATE", "honest intervals", VIOLET)], top)
+        out.append(diagram_card(sid, left, top + int(1.75 * EMU_PER_INCH), int(6.9 * EMU_PER_INCH), box_h, "OUTPUT", "30 / 60 / 120-minute heads + risk + reason + provenance", NAVY))
+    elif title == "Causal-in-time residual" or title == "Personalization":
+        row([("T", "forecast", TEAL), ("TARGET", "time arrives", VIOLET), ("ERROR", "observed", TEAL), ("T+1", "bounded update", VIOLET)], top)
+        out.append(diagram_card(sid, left, top + int(1.75 * EMU_PER_INCH), int(6.9 * EMU_PER_INCH), box_h, "GUARDRAIL", "Future target cannot influence its own forecast. Adaptive residual != physiology.", NAVY))
+    elif title == "Serving boundary":
+        row([("BUNDLE", "joblib + JSON", TEAL), ("ENGINE", "no training", VIOLET), ("API", "127.0.0.1", TEAL), ("UI", "React/Vite", VIOLET)], top)
+    elif title == "Dashboard boundary" or title == "The experience":
+        row([("SELECT", "test patient", TEAL), ("REPLAY", "+5 min", VIOLET), ("FORECAST", "heads + bands", TEAL), ("EVIDENCE", "limitations", VIOLET)], top)
+    elif title == "Missing data":
+        row([("CONNECTED", "fresh CGM", TEAL), ("GAP", "warning", "D58A36"), ("DROPOUT", "abstain", NAVY)], top)
+        out.append(diagram_card(sid, left, top + int(1.75 * EMU_PER_INCH), int(6.9 * EMU_PER_INCH), box_h, "POLICY", "CGM older than 15 minutes -> forecast empty, estimates null, reason visible.", NAVY))
+    elif title == "Distribution shift":
+        row([("NOMINAL", "89.46% cov.", TEAL), ("GLUCOSE +25", "62.09% cov.", "D58A36"), ("MEAL x2", "89.35% cov.", VIOLET), ("HbA1c +1", "80.26% cov.", "D58A36")], top)
+    elif title == "Alert behavior":
+        row([("0.10", "more recall", TEAL), ("0.20", "balanced view", VIOLET), ("0.50", "few alerts", NAVY)], top)
+        out.append(diagram_card(sid, left, top + int(1.75 * EMU_PER_INCH), int(6.9 * EMU_PER_INCH), box_h, "TRADE-OFF", "Threshold changes episode sensitivity and false-alert burden; no clinical threshold claim.", NAVY))
+    elif title == "Live demo":
+        row([("WARNING", "synthetic", TEAL), ("REPLAY", "clock", VIOLET), ("DROPOUT", "abstain", "D58A36"), ("EVIDENCE", "metrics", TEAL)], top)
+    elif title == "Safety and transparency":
+        row([("NO DOSING", "no advice", NAVY), ("PAST-ONLY", "no leakage", TEAL), ("NULL", "no guessing", VIOLET), ("PROVENANCE", "traceable", TEAL)], top)
+    else:
+        return ""
+    return "".join(out)
+
+
 def text_shape(
     shape_no: int,
     name: str,
@@ -66,15 +137,21 @@ def text_shape(
 
 def slide_xml(title: str, bullets: list[str], number: int, accent: str = TEAL) -> str:
     title_paragraph = [{"text": title, "bullet": False, "bold": True, "size": 28, "color": NAVY}]
-    body_paragraphs = [{"text": line, "bullet": True, "size": 17, "color": INK} for line in bullets]
+    body_paragraphs = [{"text": line, "bullet": True, "size": 15 if diagram_for(title) else 17, "color": INK} for line in bullets]
     footer_paragraph = [{"text": f"AarogyaTwin-X  |  synthetic research prototype  |  {number}", "bullet": False, "size": 9, "color": MUTED}]
+    diagram = diagram_for(title)
+    body_x = int(0.72 * EMU_PER_INCH)
+    body_y = int(1.38 * EMU_PER_INCH)
+    body_w = int(4.25 * EMU_PER_INCH) if diagram else int(11.7 * EMU_PER_INCH)
+    body_h = int(5.25 * EMU_PER_INCH) if diagram else int(5.25 * EMU_PER_INCH)
     tree = (
         f"<p:nvGrpSpPr><p:cNvPr id=\"1\" name=\"\"/><p:cNvGrpSpPr/><p:nvPr/></p:nvGrpSpPr>"
         f"<p:grpSpPr><a:xfrm><a:off x=\"0\" y=\"0\"/><a:ext cx=\"0\" cy=\"0\"/><a:chOff x=\"0\" y=\"0\"/><a:chExt cx=\"0\" cy=\"0\"/></a:xfrm></p:grpSpPr>"
         f"{rect_shape(2, 'background', 0, 0, int(SLIDE_W), int(SLIDE_H), 'FFFFFF')}"
         f"{rect_shape(3, 'accent', 0, 0, int(SLIDE_W), int(0.18 * EMU_PER_INCH), accent)}"
         f"{text_shape(4, 'title', int(0.65 * EMU_PER_INCH), int(0.48 * EMU_PER_INCH), int(12 * EMU_PER_INCH), int(0.7 * EMU_PER_INCH), title_paragraph, 28, NAVY)}"
-        f"{text_shape(5, 'body', int(0.82 * EMU_PER_INCH), int(1.38 * EMU_PER_INCH), int(11.7 * EMU_PER_INCH), int(5.25 * EMU_PER_INCH), body_paragraphs, 17, INK)}"
+        f"{text_shape(5, 'body', body_x, body_y, body_w, body_h, body_paragraphs, 15 if diagram else 17, INK)}"
+        f"{diagram}"
         f"{text_shape(6, 'footer', int(0.65 * EMU_PER_INCH), int(7.12 * EMU_PER_INCH), int(12 * EMU_PER_INCH), int(0.2 * EMU_PER_INCH), footer_paragraph, 9, MUTED)}"
     )
     return f"""<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><p:sld xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><p:cSld><p:spTree>{tree}</p:spTree></p:cSld><p:clrMapOvr><a:masterClrMapping/></p:clrMapOvr></p:sld>"""
@@ -126,6 +203,57 @@ def pdf_text(text: str) -> str:
     return clean.encode("latin-1", "replace").decode("latin-1").replace("\\", "\\\\").replace("(", "\\(").replace(")", "\\)")
 
 
+def hex_rgb(color: str) -> tuple[float, float, float]:
+    return tuple(int(color[index : index + 2], 16) / 255.0 for index in (0, 2, 4))
+
+
+def pdf_card(x: int, y: int, w: int, h: int, label: str, detail: str, color: str) -> list[str]:
+    red, green, blue = hex_rgb(color)
+    label = pdf_text(label)
+    detail = pdf_text(detail)
+    return [
+        "q", f"{red:.3f} {green:.3f} {blue:.3f} rg", f"{x} {y} {w} {h} re", "f", "Q",
+        "BT", "/F1 10 Tf", "1 1 1 rg", f"{x + 8} {y + h - 18} Td", f"({label}) Tj",
+        "/F1 7 Tf", "0 -14 Td", f"({detail}) Tj", "ET",
+    ]
+
+
+def pdf_diagram_commands(title: str) -> list[str]:
+    cards = {
+        "End-to-end data flow": [("SIMULATE", "seed 2026", TEAL), ("SPLIT", "patients", VIOLET), ("FEATURE", "past-only", TEAL), ("MODEL", "CPU heads", VIOLET), ("CALIBRATE", "intervals", VIOLET), ("API", "localhost", TEAL), ("DASHBOARD", "replay", VIOLET)],
+        "Synthetic data boundary": [("60 PATIENTS", "5 synthetic days", TEAL), ("CGM", "5-minute grid", VIOLET), ("CONTEXT", "HR / HRV / sleep", TEAL), ("MEALS", "activity + carbs", VIOLET)],
+        "Leakage-aware evaluation": [("TRAIN", "36 patients", TEAL), ("TUNE", "6 patients", VIOLET), ("INTERVAL", "6 patients", TEAL), ("TEST", "12 held-out", "D58A36")],
+        "Model layers": [("FEATURES", "lags + context", TEAL), ("TEMPORAL", "glucose heads", VIOLET), ("EVENT", "fusion risk", TEAL), ("CALIBRATE", "honest bands", VIOLET)],
+        "Model architecture": [("FEATURES", "lags + context", TEAL), ("TEMPORAL", "glucose heads", VIOLET), ("EVENT", "fusion risk", TEAL), ("CALIBRATE", "honest bands", VIOLET)],
+        "Causal-in-time residual": [("T", "forecast", TEAL), ("TARGET", "time arrives", VIOLET), ("ERROR", "observed", TEAL), ("T+1", "bounded update", VIOLET)],
+        "Personalization": [("T", "forecast", TEAL), ("TARGET", "time arrives", VIOLET), ("ERROR", "observed", TEAL), ("T+1", "bounded update", VIOLET)],
+        "Serving boundary": [("BUNDLE", "joblib + JSON", TEAL), ("ENGINE", "no training", VIOLET), ("API", "127.0.0.1", TEAL), ("UI", "React/Vite", VIOLET)],
+        "Dashboard boundary": [("SELECT", "test patient", TEAL), ("REPLAY", "+5 min", VIOLET), ("FORECAST", "heads + bands", TEAL), ("EVIDENCE", "limitations", VIOLET)],
+        "The experience": [("SELECT", "test patient", TEAL), ("REPLAY", "+5 min", VIOLET), ("FORECAST", "heads + bands", TEAL), ("EVIDENCE", "limitations", VIOLET)],
+        "Missing data": [("CONNECTED", "fresh CGM", TEAL), ("GAP", "warning", "D58A36"), ("DROPOUT", "abstain", NAVY)],
+        "Distribution shift": [("NOMINAL", "89.46% cov.", TEAL), ("GLUCOSE +25", "62.09% cov.", "D58A36"), ("MEAL x2", "89.35% cov.", VIOLET), ("HbA1c +1", "80.26% cov.", "D58A36")],
+        "Alert behavior": [("0.10", "more recall", TEAL), ("0.20", "balanced", VIOLET), ("0.50", "few alerts", NAVY)],
+        "Live demo": [("WARNING", "synthetic", TEAL), ("REPLAY", "clock", VIOLET), ("DROPOUT", "abstain", "D58A36"), ("EVIDENCE", "metrics", TEAL)],
+        "Safety and transparency": [("NO DOSING", "no advice", NAVY), ("PAST-ONLY", "no leakage", TEAL), ("NULL", "no guessing", VIOLET), ("PROVENANCE", "traceable", TEAL)],
+    }
+    values = cards.get(title)
+    if not values:
+        return []
+    commands: list[str] = []
+    x0, y0, w, h, gap = 540, 330, 82, 66, 12
+    for index, (label, detail, color) in enumerate(values):
+        x = x0 + index * (w + gap)
+        if x + w > 940:
+            x = x0 + (index % 2) * (w + gap)
+            y = y0 - 92
+        else:
+            y = y0
+        commands += pdf_card(x, y, w, h, label, detail, color)
+        if index < len(values) - 1 and x + w + 8 < 940:
+            commands += ["BT", "/F1 16 Tf", "0.46 0.40 0.91 rg", f"{x + w + 2} {y + 24} Td", "(>) Tj", "ET"]
+    return commands
+
+
 def write_pdf(path: Path, slides: list[tuple[str, list[str]]]) -> None:
     objects: list[bytes] = []
     objects.append(b"<< /Type /Catalog /Pages 2 0 R >>")
@@ -134,10 +262,14 @@ def write_pdf(path: Path, slides: list[tuple[str, list[str]]]) -> None:
     objects.append(("<< /Type /Pages /Kids [" + " ".join(f"{x} 0 R" for x in page_ids) + f"] /Count {len(slides)} >>").encode())
     contents: list[bytes] = []
     for index, (title, bullets) in enumerate(slides, 1):
-        commands = ["q", "0.08 0.15 0.24 rg", "0 508 960 32 re", "f", "Q", "BT", "/F1 24 Tf", "0.08 0.15 0.24 rg", "48 470 Td", f"({pdf_text(title)}) Tj", "/F1 12 Tf", "0.15 0.21 0.30 rg", "0 -42 Td"]
+        has_diagram = bool(pdf_diagram_commands(title))
+        commands = ["q", "0.08 0.15 0.24 rg", "0 508 960 32 re", "f", "Q"]
+        commands += pdf_diagram_commands(title)
+        commands += ["BT", "/F1 24 Tf", "0.08 0.15 0.24 rg", "48 470 Td", f"({pdf_text(title)}) Tj", "/F1 12 Tf", "0.15 0.21 0.30 rg", "0 -42 Td"]
         y_lines = []
+        line_width = 46 if has_diagram else 96
         for bullet in bullets:
-            for line in wrap(bullet.replace("—", "-"),  ninety := 96):
+            for line in wrap(bullet.replace("—", "-"), line_width):
                 y_lines.append("- " + line)
         for line in y_lines:
             commands.append(f"({pdf_text(line)}) Tj")
