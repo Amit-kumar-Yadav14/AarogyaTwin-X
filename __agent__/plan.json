@@ -2,22 +2,22 @@
   "schema_version": 1,
   "items": [
     {
-      "title": "Add vector diagrams to deck generator",
+      "title": "Run final non-destructive compile and deck checks",
       "status": "done"
     },
     {
-      "title": "Regenerate architecture and presentation decks",
+      "title": "Start local API and dashboard preview",
       "status": "done"
     },
     {
-      "title": "Verify visual deck artifacts locally",
+      "title": "Smoke-test live API and frontend endpoints",
       "status": "done"
     },
     {
-      "title": "Report repaired presentation files",
+      "title": "Report live preview URLs and verified results",
       "status": "done"
     }
   ],
-  "updated_at": "2026-10-03T09:31:02.215Z",
+  "updated_at": "2026-10-03T09:44:14.055Z",
   "session_id": "01a0fbf1-4dcd-73eb-98a0-64b10e66ed3a"
 }
