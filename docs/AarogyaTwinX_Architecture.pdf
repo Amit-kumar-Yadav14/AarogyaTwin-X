@@ -1,0 +1,344 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R 4 0 R 5 0 R 6 0 R 7 0 R 8 0 R 9 0 R 10 0 R 11 0 R] /Count 9 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 960 540] /Resources << /Font << /F1 21 0 R >> >> /Contents 12 0 R >>
+endobj
+4 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 960 540] /Resources << /Font << /F1 21 0 R >> >> /Contents 13 0 R >>
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 960 540] /Resources << /Font << /F1 21 0 R >> >> /Contents 14 0 R >>
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 960 540] /Resources << /Font << /F1 21 0 R >> >> /Contents 15 0 R >>
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 960 540] /Resources << /Font << /F1 21 0 R >> >> /Contents 16 0 R >>
+endobj
+8 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 960 540] /Resources << /Font << /F1 21 0 R >> >> /Contents 17 0 R >>
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 960 540] /Resources << /Font << /F1 21 0 R >> >> /Contents 18 0 R >>
+endobj
+10 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 960 540] /Resources << /Font << /F1 21 0 R >> >> /Contents 19 0 R >>
+endobj
+11 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 960 540] /Resources << /Font << /F1 21 0 R >> >> /Contents 20 0 R >>
+endobj
+12 0 obj
+<< /Length 441 >>
+stream
+q
+0.08 0.15 0.24 rg
+0 508 960 32 re
+f
+Q
+BT
+/F1 24 Tf
+0.08 0.15 0.24 rg
+48 470 Td
+(AarogyaTwin-X architecture) Tj
+/F1 12 Tf
+0.15 0.21 0.30 rg
+0 -42 Td
+(- Local synthetic research prototype) Tj
+0 -17 Td
+(- Forecast heads at 30, 60, and 120 minutes) Tj
+0 -17 Td
+(- Evidence, uncertainty, provenance, and abstention are first-class outputs) Tj
+0 -17 Td
+/F1 8 Tf
+0.40 0.46 0.54 rg
+0 -18 Td
+(AarogyaTwin-X | synthetic research prototype | 1) Tj
+ET
+endstream
+endobj
+13 0 obj
+<< /Length 507 >>
+stream
+q
+0.08 0.15 0.24 rg
+0 508 960 32 re
+f
+Q
+BT
+/F1 24 Tf
+0.08 0.15 0.24 rg
+48 470 Td
+(End-to-end data flow) Tj
+/F1 12 Tf
+0.15 0.21 0.30 rg
+0 -42 Td
+(- Seed 2026 -> synthetic simulator -> patient-disjoint split) Tj
+0 -17 Td
+(- Past-only feature builder -> CPU temporal model) Tj
+0 -17 Td
+(- Calibration and bounded residual -> joblib/JSON artifacts) Tj
+0 -17 Td
+(- FastAPI local API -> React/Vite dashboard) Tj
+0 -17 Td
+/F1 8 Tf
+0.40 0.46 0.54 rg
+0 -18 Td
+(AarogyaTwin-X | synthetic research prototype | 2) Tj
+ET
+endstream
+endobj
+14 0 obj
+<< /Length 507 >>
+stream
+q
+0.08 0.15 0.24 rg
+0 508 960 32 re
+f
+Q
+BT
+/F1 24 Tf
+0.08 0.15 0.24 rg
+48 470 Td
+(Synthetic data boundary) Tj
+/F1 12 Tf
+0.15 0.21 0.30 rg
+0 -42 Td
+(- 60 patients, 5 days, 5-minute grid) Tj
+0 -17 Td
+(- CGM, heart rate, HRV, sleep, activity, meals, and static fields) Tj
+0 -17 Td
+(- Hidden simulator parameters never become model features) Tj
+0 -17 Td
+(- No real patient records or public benchmark data) Tj
+0 -17 Td
+/F1 8 Tf
+0.40 0.46 0.54 rg
+0 -18 Td
+(AarogyaTwin-X | synthetic research prototype | 3) Tj
+ET
+endstream
+endobj
+15 0 obj
+<< /Length 553 >>
+stream
+q
+0.08 0.15 0.24 rg
+0 508 960 32 re
+f
+Q
+BT
+/F1 24 Tf
+0.08 0.15 0.24 rg
+48 470 Td
+(Leakage-aware evaluation) Tj
+/F1 12 Tf
+0.15 0.21 0.30 rg
+0 -42 Td
+(- 36 train patients; 6 calibration-tuning; 6 calibration-interval; 12 test) Tj
+0 -17 Td
+(- No test patient tunes models, calibration, thresholds, or intervals) Tj
+0 -17 Td
+(- Every feature vector is bounded by its replay anchor) Tj
+0 -17 Td
+(- Correlated replay windows are not independent subjects) Tj
+0 -17 Td
+/F1 8 Tf
+0.40 0.46 0.54 rg
+0 -18 Td
+(AarogyaTwin-X | synthetic research prototype | 4) Tj
+ET
+endstream
+endobj
+16 0 obj
+<< /Length 524 >>
+stream
+q
+0.08 0.15 0.24 rg
+0 508 960 32 re
+f
+Q
+BT
+/F1 24 Tf
+0.08 0.15 0.24 rg
+48 470 Td
+(Model layers) Tj
+/F1 12 Tf
+0.15 0.21 0.30 rg
+0 -42 Td
+(- Temporal lag gradient-boosting heads for glucose) Tj
+0 -17 Td
+(- Fusion logistic classifier for the sustained-event endpoint) Tj
+0 -17 Td
+(- Train-only imputation, standardization, and missing indicators) Tj
+0 -17 Td
+(- Platt probability calibration and split-conformal intervals) Tj
+0 -17 Td
+/F1 8 Tf
+0.40 0.46 0.54 rg
+0 -18 Td
+(AarogyaTwin-X | synthetic research prototype | 5) Tj
+ET
+endstream
+endobj
+17 0 obj
+<< /Length 537 >>
+stream
+q
+0.08 0.15 0.24 rg
+0 508 960 32 re
+f
+Q
+BT
+/F1 24 Tf
+0.08 0.15 0.24 rg
+48 470 Td
+(Causal-in-time residual) Tj
+/F1 12 Tf
+0.15 0.21 0.30 rg
+0 -42 Td
+(- A prior forecast error is used only after its target timestamp is observable) Tj
+0 -17 Td
+(- Per-patient, short, bounded error history) Tj
+0 -17 Td
+(- Strength selected on calibration-tuning patients) Tj
+0 -17 Td
+(- Adaptive residual only - not a clinical insulin-sensitivity model) Tj
+0 -17 Td
+/F1 8 Tf
+0.40 0.46 0.54 rg
+0 -18 Td
+(AarogyaTwin-X | synthetic research prototype | 6) Tj
+ET
+endstream
+endobj
+18 0 obj
+<< /Length 520 >>
+stream
+q
+0.08 0.15 0.24 rg
+0 508 960 32 re
+f
+Q
+BT
+/F1 24 Tf
+0.08 0.15 0.24 rg
+48 470 Td
+(Serving boundary) Tj
+/F1 12 Tf
+0.15 0.21 0.30 rg
+0 -42 Td
+(- TwinEngine loads artifacts and never trains during API requests) Tj
+0 -17 Td
+(- Local endpoints: health, patients, twin snapshot, scenario, metrics) Tj
+0 -17 Td
+(- Missing/stale CGM produces warnings and abstention) Tj
+0 -17 Td
+(- No fallback medical numbers are inserted) Tj
+0 -17 Td
+/F1 8 Tf
+0.40 0.46 0.54 rg
+0 -18 Td
+(AarogyaTwin-X | synthetic research prototype | 7) Tj
+ET
+endstream
+endobj
+19 0 obj
+<< /Length 475 >>
+stream
+q
+0.08 0.15 0.24 rg
+0 508 960 32 re
+f
+Q
+BT
+/F1 24 Tf
+0.08 0.15 0.24 rg
+48 470 Td
+(Dashboard boundary) Tj
+/F1 12 Tf
+0.15 0.21 0.30 rg
+0 -42 Td
+(- Replay held-out patient history) Tj
+0 -17 Td
+(- Three named forecast heads and intervals) Tj
+0 -17 Td
+(- Event state and risk when eligible) Tj
+0 -17 Td
+(- Dropout, provenance, limitations, and assumption-based scenario view) Tj
+0 -17 Td
+/F1 8 Tf
+0.40 0.46 0.54 rg
+0 -18 Td
+(AarogyaTwin-X | synthetic research prototype | 8) Tj
+ET
+endstream
+endobj
+20 0 obj
+<< /Length 488 >>
+stream
+q
+0.08 0.15 0.24 rg
+0 508 960 32 re
+f
+Q
+BT
+/F1 24 Tf
+0.08 0.15 0.24 rg
+48 470 Td
+(Non-claims) Tj
+/F1 12 Tf
+0.15 0.21 0.30 rg
+0 -42 Td
+(- No clinical accuracy or real-patient generalization) Tj
+0 -17 Td
+(- No causal treatment effect or dosing recommendation) Tj
+0 -17 Td
+(- No arbitrary distribution-shift robustness) Tj
+0 -17 Td
+(- Full saved evidence is in docs/EVIDENCE_SUMMARY.md) Tj
+0 -17 Td
+/F1 8 Tf
+0.40 0.46 0.54 rg
+0 -18 Td
+(AarogyaTwin-X | synthetic research prototype | 9) Tj
+ET
+endstream
+endobj
+21 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 22
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000171 00000 n 
+0000000299 00000 n 
+0000000427 00000 n 
+0000000555 00000 n 
+0000000683 00000 n 
+0000000811 00000 n 
+0000000939 00000 n 
+0000001067 00000 n 
+0000001196 00000 n 
+0000001325 00000 n 
+0000001818 00000 n 
+0000002377 00000 n 
+0000002936 00000 n 
+0000003541 00000 n 
+0000004117 00000 n 
+0000004706 00000 n 
+0000005278 00000 n 
+0000005805 00000 n 
+0000006345 00000 n 
+trailer
+<< /Size 22 /Root 1 0 R >>
+startxref
+6416
+%%EOF
