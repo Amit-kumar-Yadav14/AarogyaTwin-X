@@ -31,8 +31,7 @@
 * **Team Lead / Members:**
   * Member 1: *[Add Full Name]* — *[Role / Email / GitHub Profile]*
   * Member 2: *[Add Full Name]* — *[Role / Email / GitHub Profile]*
-  * Member 3: *[Add Full Name]* — *[Role / Email / GitHub Profile]*
-  * Member 4: *[Add Full Name]* — *[Role / Email / GitHub Profile]*
+
 
 ---
 
