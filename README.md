@@ -127,20 +127,18 @@ AarogyaTwin-X serves as a **Longitudinal Clinician Digital Twin Research Workben
 
 * **Video Title:** AarogyaTwin-X: Clinician Digital Twin & Conformal Glucose Forecasting
 * **YouTube Unlisted Link:** [Watch Demo Video on YouTube](https://youtu.be/YOUR_UNLISTED_VIDEO_ID_HERE) *(Replace with your unlisted YouTube link)*
-* **Video Demonstration Runbook & Script:** See [`docs/VIDEO_RUNBOOK.md`](docs/VIDEO_RUNBOOK.md) for the exact 20–24 minute step-by-step presentation script, timed checkpoints, and narrator notes.
+* **Video Demonstration:** Live walkthrough demonstrating patient timeline replay, multi-horizon conformal forecast heads (30m, 60m, 120m), sensor dropout safety abstention, and What-If scenario sandbox.
 
 ---
 
 ## 🏛️ Architecture & Presentation Deliverables
 
-The architecture and presentation decks are auto-generated locally using Python standard library scripts (`scripts/build_decks.py`) and are fully accessible in both PDF and PPTX formats:
+The architecture and presentation decks are fully accessible in PPTX format:
 
-| Deliverable | Presentation File | Markdown / Technical Source |
+| Deliverable | Presentation File | Description |
 | :--- | :--- | :--- |
-| **System Architecture Diagram & Data Flow** | [📊 Architecture PPTX](docs/AarogyaTwin-X_System_Architecture.pptx) | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) |
-| **Comprehensive Presentation Deck** | [📊 Presentation PPTX](docs/AarogyaTwin-X.pptx) | [`docs/PRESENTATION.md`](docs/PRESENTATION.md) |
-| **Structured Evidence & Shift Summary** | — | [`docs/EVIDENCE_SUMMARY.md`](docs/EVIDENCE_SUMMARY.md) |
-| **Typed API Interface Contract** | — | [`docs/API_CONTRACT.md`](docs/API_CONTRACT.md) |
+| **System Architecture Diagram & Data Flow** | [📊 Architecture PPTX](docs/AarogyaTwin-X_System_Architecture.pptx) | Complete end-to-end architecture diagram, data flow layers, and safety gates |
+| **Comprehensive Presentation Deck** | [📊 Presentation PPTX](docs/AarogyaTwin-X.pptx) | 12-slide comprehensive presentation covering problem, solution, telemetry, and evaluation |
 
 ---
 
