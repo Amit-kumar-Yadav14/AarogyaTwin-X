@@ -29,18 +29,17 @@
 
 * **Team Name:** Team Aarogya
 * **Team Lead / Members:**
-  * Member 1: *[Add Full Name]* — *[Role / Email / GitHub Profile]*
-  * Member 2: *[Add Full Name]* — *[Role / Email / GitHub Profile]*
+  * Member 1: *AMIT KUMAR* 
+  * Member 2: *HANSRAJ PANDEY*
 
 
 ---
 
 ## 🏫 College / Incubator Information
 
-* **College / University / Institute:** *[Add College / Institute Name, e.g. XYZ Institute of Technology]*
-* **Department / Center:** Department of Computer Science & Engineering / Biomedical Engineering
-* **Incubator / Innovation Cell:** *[Add Incubator Name, e.g. Institute Innovation Council (IIC) / Atal Incubation Centre]*
-* **City & State:** *[Add City, State, India]*
+* **College / University / Institute:** *ARYA COLLEGE OF ENGINEERING AND IT*
+* **Department / Center:** Department of Computer Science & Engineering 
+* **City & State:** *[JAIPUR, RAJASTHAN, India]*
 
 ---
 
