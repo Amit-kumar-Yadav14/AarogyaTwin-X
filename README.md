@@ -38,7 +38,8 @@
 ## 🏫 College / Incubator Information
 
 * **College / University / Institute:** *ARYA COLLEGE OF ENGINEERING AND IT*
-* **Department / Center:** Department of Computer Science & Engineering 
+* **Department / Center:** Department of Computer Science & Engineering
+* **Incubator / Innovation Cell:** *• Arya Incubation Centre (AIC)*
 * **City & State:** *[JAIPUR, RAJASTHAN, India]*
 
 ---
