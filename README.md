@@ -17,7 +17,7 @@
 | **Healthcare Use Case** | ✅ Included | [See Healthcare Use Case Section](#-healthcare-use-case) |
 | **Technical Stack** | ✅ Included | [See Technical Stack Section](#-technical-stack) |
 | **AI/ML Model / Framework Details** | ✅ Included | [See AI/ML Model Details](#-aiml-model-and-framework-details) |
-| **15–20 Minute Demo Video (Unlisted YouTube)** | ✅ Ready / Scripted | [See Video Demo Section](#-1520-minute-demo-video) |
+| **15–20 Minute Demo Video (Unlisted YouTube)** | ✅ Included | [🎥 Watch on YouTube](https://youtu.be/3ck4XbOvc_Y) |
 | **Open-source License Details** | ✅ MIT License | [LICENSE](LICENSE) ([Details](#-open-source-license-details)) |
 | **Architecture Diagram in PDF/PPT Format** | ✅ Included | [📊 Architecture PPTX](docs/AarogyaTwin-X_System_Architecture.pptx) |
 | **Presentation in PDF/PPT Format** | ✅ Included | [📊 Presentation PPTX](docs/AarogyaTwin-X.pptx) |
@@ -125,7 +125,7 @@ AarogyaTwin-X serves as a **Longitudinal Clinician Digital Twin Research Workben
 ## 🎥 15–20 Minute Demo Video
 
 * **Video Title:** AarogyaTwin-X: Clinician Digital Twin & Conformal Glucose Forecasting
-* **YouTube Unlisted Link:** [Watch Demo Video on YouTube](https://youtu.be/YOUR_UNLISTED_VIDEO_ID_HERE) *(Replace with your unlisted YouTube link)*
+* **YouTube Unlisted Link:** [Watch Demo Video on YouTube (15–20 Mins)](https://youtu.be/3ck4XbOvc_Y)
 * **Video Demonstration:** Live walkthrough demonstrating patient timeline replay, multi-horizon conformal forecast heads (30m, 60m, 120m), sensor dropout safety abstention, and What-If scenario sandbox.
 
 ---
