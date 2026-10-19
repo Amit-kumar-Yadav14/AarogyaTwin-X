@@ -19,8 +19,8 @@
 | **AI/ML Model / Framework Details** | ✅ Included | [See AI/ML Model Details](#-aiml-model-and-framework-details) |
 | **15–20 Minute Demo Video (Unlisted YouTube)** | ✅ Included | [🎥 Watch on YouTube](https://youtu.be/3ck4XbOvc_Y) |
 | **Open-source License Details** | ✅ MIT License | [LICENSE](LICENSE) ([Details](#-open-source-license-details)) |
-| **Architecture Diagram in PDF/PPT Format** | ✅ Included | [📊 Architecture PPTX](docs/AarogyaTwin-X_System_Architecture.pptx) |
-| **Presentation in PDF/PPT Format** | ✅ Included | [📊 Presentation PPTX](docs/AarogyaTwin-X.pptx) |
+| **Architecture Diagram in PDF/PPT Format** | ✅ Included | [📊 Architecture PPTX](docs/AarogyaTwin-X_System_Architecture.pptx) · [🌐 View Online](https://docs.google.com/presentation/d/1yo18yyONjLXfXlUmB_PNK_BE_wCaxq7Y/edit?usp=drivesdk&ouid=114305611851050083954&rtpof=true&sd=true) |
+| **Presentation in PDF/PPT Format** | ✅ Included | [📊 Presentation PPTX](docs/AarogyaTwin-X.pptx) · [🌐 View Online](https://docs.google.com/presentation/d/196ruVtdRVjEaRZunFvVRY0QxOmRc-3OS/edit?usp=drivesdk&ouid=114305611851050083954&rtpof=true&sd=true) |
 | **Publicly Accessible Without Extra Permissions** | ✅ Verified | Public GitHub repository, all local assets self-contained |
 
 ---
@@ -132,12 +132,12 @@ AarogyaTwin-X serves as a **Longitudinal Clinician Digital Twin Research Workben
 
 ## 🏛️ Architecture & Presentation Deliverables
 
-The architecture and presentation decks are fully accessible in PPTX format:
+The architecture and presentation decks are fully accessible in both offline PPTX format and direct one-click online Google Slides:
 
-| Deliverable | Presentation File | Description |
-| :--- | :--- | :--- |
-| **System Architecture Diagram & Data Flow** | [📊 Architecture PPTX](docs/AarogyaTwin-X_System_Architecture.pptx) | Complete end-to-end architecture diagram, data flow layers, and safety gates |
-| **Comprehensive Presentation Deck** | [📊 Presentation PPTX](docs/AarogyaTwin-X.pptx) | 12-slide comprehensive presentation covering problem, solution, telemetry, and evaluation |
+| Deliverable | Offline PPTX (Repository) | Online Viewer (Google Slides) | Description |
+| :--- | :--- | :--- | :--- |
+| **System Architecture Diagram & Data Flow** | [📊 Architecture PPTX](docs/AarogyaTwin-X_System_Architecture.pptx) | [🌐 View Architecture Slides](https://docs.google.com/presentation/d/1yo18yyONjLXfXlUmB_PNK_BE_wCaxq7Y/edit?usp=drivesdk&ouid=114305611851050083954&rtpof=true&sd=true) | Complete end-to-end architecture diagram, data flow layers, and safety gates |
+| **Comprehensive Presentation Deck** | [📊 Presentation PPTX](docs/AarogyaTwin-X.pptx) | [🌐 View Presentation Slides](https://docs.google.com/presentation/d/196ruVtdRVjEaRZunFvVRY0QxOmRc-3OS/edit?usp=drivesdk&ouid=114305611851050083954&rtpof=true&sd=true) | 12-slide comprehensive presentation covering problem, solution, telemetry, and evaluation |
 
 ---
 
